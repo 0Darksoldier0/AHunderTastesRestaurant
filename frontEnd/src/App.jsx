@@ -10,7 +10,6 @@ import Footer from './components/Footer/Footer'
 import ScrollToTop from './context/ScrollToTop'
 import SignIn from './pages/SignIn/SignIn'
 import SignUp from './pages/SignUp/SignUp'
-import Payment from './pages/Payment/Payment'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import DefaultRoute from './components/DefaultRoute/DefaultRoute'
 import { ToastContainer } from 'react-toastify'
@@ -37,8 +36,7 @@ const App = () => {
                 <Route path='/signUp' element={<SignUp />} />
                 <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
                 <Route path='/placeOrder' element={<ProtectedAndCheckCartAmountRoute><PlaceOrder /></ProtectedAndCheckCartAmountRoute>} />
-                <Route path='/payment' element={<ProtectedAndCheckCartAmountRoute><Payment /></ProtectedAndCheckCartAmountRoute>} />
-
+               
                 <Route path="*" element={<ProtectedRoute></ProtectedRoute>} />
                 <Route path="*" element={<DefaultRoute></DefaultRoute>} />
             </Routes>

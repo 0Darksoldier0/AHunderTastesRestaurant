@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BACKEND_URL } from '../../config/constants.js';
+import { BACKEND_URL, MIN_PRICE } from '../../../config/constants.js';
 import { toast } from 'react-toastify';
 import './EditPopup.css';
 import { useContext } from 'react';
@@ -35,47 +35,43 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
     }, [editedProductData])
 
     const onChangeHandler = (event) => {
-        const { name, value, type, files } = event.target;
+        const { name, value } = event.target;
 
         if (name === 'availability') {
             setIsAvailable(event.target.checked);
             setEditedProductData(data => ({ ...data, [name]: event.target.checked ? 1 : 0 }));
-
-        } else {
-            setEditedProductData(prev => ({
-                ...prev,
-                [name]: type === 'file' ? files[0] : value
-            }));
+        }
+        else if (name === "price") {
+            if (/^\d*\.?\d*$/.test(value)) {
+                setEditedProductData(data => ({ ...data, [name]: value }));
+            }
+        } 
+        else {
+            setEditedProductData(data => ({...data, [name]: value }));
         }
     };
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
-        if (editedProductData.product_name === "" || editedProductData.price === 0 || editedProductData.description === "") {
-            toast.error("No empty field is allowed");
+        if (editedProductData.product_name.trim() === "" || Number(editedProductData.price) < MIN_PRICE || editedProductData.description === "") {
+            toast.error("Please enter valid data");
+            return;
         }
-
         else {
-
             try {
                 const response = await axios.post(`${BACKEND_URL}/api/product/update`, editedProductData, {headers: {token}});
                 if (response.status === 200) {
                     onUpdateSuccess();
                     toast.success(response.data.message)
-                } else {
-                    toast.error(response.data.message || "Failed to add product.");
-
                 }
-            } catch (error) {
+            } 
+            catch (error) {
                 if (error.response) {
-                    if (error.response.data.message === "Product name has already existed") {
-                        toast.error("Product name has already existed");
-                    }
+                    toast.error(error.response.data.message);
                 }
                 else {
                     toast.error("Server error, please try again later");
                 }
-
             }
         }
     };
@@ -87,11 +83,11 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
                 <form onSubmit={onSubmitHandler}>
                     <div className="form-group">
                         <label>Product Name</label>
-                        <input type="text" name="product_name" value={editedProductData.product_name || ''} onChange={onChangeHandler} required />
+                        <input type="text" name="product_name" value={editedProductData.product_name || ''} onChange={onChangeHandler} placeholder='e.g. Pho Bo' required />
                     </div>
                     <div className="form-group">
                         <label>Price</label>
-                        <input type="number" name="price" value={editedProductData.price || ''} onChange={onChangeHandler} required />
+                        <input type="text" name="price" value={editedProductData.price || ''} onChange={onChangeHandler} placeholder='e.g. 10000' required />
                     </div>
                     <div className="form-group">
                         <label>Category</label>

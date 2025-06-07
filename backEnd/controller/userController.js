@@ -67,7 +67,7 @@ const userSignUp = async (req, res) => {
     }
     catch (error) {
         console.error("(UserSignUp) Error signing up user: ", error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Error signing up user" });
     }
 }
 
@@ -80,8 +80,8 @@ const getUserData = async (req, res) => {
         return res.status(200).json({ userData: results[0] })
     }
     catch (error) {
-        console.error("(GetUserData) Error geting user data: ", error);
-        return res.status(500).json({ message: "Unable to fetch user data" });
+        console.error("(GetUserData) Error fetching user data: ", error);
+        return res.status(500).json({ message: "Error fetching user data" });
     }
 }
 
@@ -95,7 +95,7 @@ const getUsers = async (req, res) => {
     }
     catch (error) {
         console.log("(GetUsers) Error fetching users: ", error);
-        return res.status(500).json({ message: "Unable to fetch users" });
+        return res.status(500).json({ message: "Error fetching users" });
     }
 }
 
@@ -110,7 +110,7 @@ const updateUserFirstName = async (req, res) => {
     }
     catch (error) {
         console.error("(UpdateUserFirstname) Error updating user first name: ", error);
-        return res.status(500).json({ message: "Unable to update user firstname" });
+        return res.status(500).json({ message: "Error updating user first name" });
     }
 }
 
@@ -125,7 +125,7 @@ const updateUserLastName = async (req, res) => {
     }
     catch (error) {
         console.error("(UpdateUserLastname) Error updating user last name: ", error);
-        return res.status(500).json({ message: "Unable to update user last name" });
+        return res.status(500).json({ message: "Error updating user last name" });
     }
 }
 

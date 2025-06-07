@@ -4,7 +4,7 @@ const authenticateToken = (req, res, next) => {
     const {token} = req.headers;
 
     if (token == null) {
-        // console.log("No token provided, sending 401");
+        console.log("No token provided, sending 401");
         return res.status(401).json({message: "Not Signed In"});
     }
 
@@ -15,7 +15,7 @@ const authenticateToken = (req, res, next) => {
             username: response.username,
             type: response.type
         };
-        // console.log("Token successfully verified. User:", req.user.username, "Type:", req.user.type);
+        console.log("Token successfully verified. User:", req.user.username, "Type:", req.user.type);
         next();
     }
     catch (error) {

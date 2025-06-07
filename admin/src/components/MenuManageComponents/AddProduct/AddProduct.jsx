@@ -3,7 +3,7 @@ import './AddProduct.css'
 import { assets } from '../../../assets/assets'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { BACKEND_URL } from '../../../config/constants'
+import { BACKEND_URL, MIN_PRICE} from '../../../../config/constants.js'
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../../context/StoreContext'
 
@@ -49,8 +49,8 @@ const AddProduct = () => {
 
     const onAddClickHandler = async (event) => {
         event.preventDefault();
-        if (data.product_name === "" || data.price === 0 || data.description === "") {
-            toast.error("No empty field is allowed");
+        if (data.product_name.trim() === "" || Number(data.price) < MIN_PRICE || data.description.trim() === "") {
+            toast.error("Please enter valid data");
         }
 
         else {
@@ -77,15 +77,10 @@ const AddProduct = () => {
                     setIsAvailable(true);
                     toast.success(response.data.message)
                     await fetchFoodList(token);
-                } else {
-                    toast.error(response.data.message || "Failed to add product.");
-
                 }
             } catch (error) {
                 if (error.response) {
-                    if (error.response.data.message === "Product name has already existed") {
-                        toast.error("Product name has already existed");
-                    }
+                    toast.error(error.response.data.message);
                 }
                 else {
                     toast.error("Server error, please try again later");
@@ -124,7 +119,7 @@ const AddProduct = () => {
                         </div>
                         <div className="add-price right-section">
                             <p>Product Price</p>
-                            <input onChange={onChangeHandler} value={data.price} type="text" name='price' placeholder='50,000 vnd' />
+                            <input onChange={onChangeHandler} value={data.price} type="text" name='price' placeholder='e.g. 10000' />
                         </div>
                     </div>
                     <div className='add-product-description right-section'>

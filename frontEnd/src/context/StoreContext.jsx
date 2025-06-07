@@ -19,6 +19,38 @@ const StoreContextProvider = (props) => {
     const [userData, setUserData] = useState({});
 
 
+    const fetchFoodList = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/api/product/listavailable`);
+            setFoodList(response.data.products);
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(FetchFoodList-StoreContext) " + error.response.data.message);
+            }
+            else {
+                console.error("(FetchFoodList-StoreContext) Server error");
+            }
+        }
+        
+    }
+
+    const loadCartData = async (token) => {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/cart/get`, {}, { headers: { token } });
+            setCartItems(response.data.cartData);
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(LoadCartData-StoreContext) " + error.response.data.message);
+            }
+            else {
+                console.error("(LoadCartData-StoreContext) Server error")
+            }
+        }
+        
+    }
+
     const addToCart = async (product_id) => {
         if (!cartItems[product_id]) {
             setCartItems((prev) => ({ ...prev, [product_id]: 1 }));
@@ -27,14 +59,34 @@ const StoreContextProvider = (props) => {
             setCartItems((prev) => ({ ...prev, [product_id]: prev[product_id] + 1 }));
         }
         if (token) {
-            await axios.post(`${BACKEND_URL}/api/cart/add`, { product_id }, { headers: { token } });
+            try {
+                await axios.post(`${BACKEND_URL}/api/cart/add`, { product_id }, { headers: { token } });
+            }
+            catch (error) {
+                if (error.response) {
+                    console.error("(AddToCart-StoreContext) " + error.response.data.message);
+                }
+                else {
+                    console.error("(AddToCart-StoreContext) Server error")
+                }
+            }
         }
     }
 
     const removeFromCart = async (product_id) => {
         setCartItems((prev) => ({ ...prev, [product_id]: prev[product_id] - 1 }))
         if (token) {
-            await axios.post(`${BACKEND_URL}/api/cart/remove`, { product_id }, { headers: { token } })
+            try {
+                await axios.post(`${BACKEND_URL}/api/cart/remove`, { product_id }, { headers: { token } });
+            }
+            catch (error) {
+                if (error.response) {
+                    console.error("(RemoveFromCart-Storecontext) " + error.response.data.message);
+                }
+                else {
+                    console.error("(RemoveFromCart-Storecontext) Server Error");
+                }
+            }
         }
     }
 
@@ -49,19 +101,20 @@ const StoreContextProvider = (props) => {
         return totalAmount;
     }
 
-    const fetchFoodList = async () => {
-        const response = await axios.get(`${BACKEND_URL}/api/product/listavailable`);
-        setFoodList(response.data.products);
-    }
-
     const fetchUserData = async (token) => {
-        const response = await axios.post(`${BACKEND_URL}/api/user/get`, {}, { headers: { token } });
-        setUserData(response.data.userData);
-    }
-
-    const loadCartData = async (token) => {
-        const response = await axios.post(`${BACKEND_URL}/api/cart/get`, {}, { headers: { token } });
-        setCartItems(response.data.cartData);
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/user/get`, {}, { headers: { token } });
+            setUserData(response.data.userData);
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(FetchUserData from StoreContext) " + error.response.data.message);
+            }
+            else {
+                console.error("(FetchUserData from StoreContext) Server error");
+            }
+        }
+        
     }
 
     useEffect(() => {

@@ -39,7 +39,7 @@ const Account = () => {
         }
     }
 
-    const onFirstnameSave = async (event) => {
+    const onFirstnameSaveClickHandler = async (event) => {
         event.preventDefault();
 
         try {
@@ -53,11 +53,16 @@ const Account = () => {
             }
         }
         catch (error) {
-            toast.error("Server error, please try again later");
+            if (error.response) {
+                toast.error(error.response.data.message);
+            }
+            else {
+                toast.error("Server error, please try again later");
+            }
         }
     }
 
-    const onLastnameSave = async (event) => {
+    const onLastnameSaveClickHandler = async (event) => {
         event.preventDefault();
 
         try {
@@ -71,11 +76,16 @@ const Account = () => {
             }
         }
         catch (error) {
-            toast.error("Server error, please try again later");
+            if (error.response) {
+                toast.error(error.response.data.message);
+            }
+            else {
+                toast.error("Server error, please try again later");
+            }
         }
     }
 
-    const onPasswordSave = async (event) => {
+    const onPasswordSaveClickHandler = async (event) => {
         event.preventDefault();
 
         try {
@@ -90,14 +100,8 @@ const Account = () => {
             }
         }
         catch (error) {
-            if (error.response.data.message === "Invalid password") {
-                toast.error("Invalid password")
-            }
-            else if (error.response.data.message === "New password does not match") {
-                toast.error("New password does not match")
-            }
-            else if (error.response.data.message === "New password is too short") {
-                toast.error("New password is too short")
+            if (error.response) {
+                toast.error(error.response.data.message);
             }
             else {
                 toast.error("Server error, please try again later");
@@ -123,7 +127,7 @@ const Account = () => {
 
                 </div>
 
-                <form className='groups' onSubmit={onFirstnameSave}>
+                <form className='groups' onSubmit={onFirstnameSaveClickHandler}>
                     <h3>First Name</h3>
                     <div className='sub-group'>
                         <p>{userData.first_name}</p>
@@ -132,7 +136,7 @@ const Account = () => {
                     </div>
                 </form>
 
-                <form className='groups' onSubmit={onLastnameSave}>
+                <form className='groups' onSubmit={onLastnameSaveClickHandler}>
                     <h3>Last Name</h3>
                     <div className='sub-group'>
                         <p>{userData.last_name}</p>
@@ -141,7 +145,7 @@ const Account = () => {
                     </div>
                 </form>
 
-                <form className='groups' onSubmit={onPasswordSave}>
+                <form className='groups' onSubmit={onPasswordSaveClickHandler}>
                     <h3>Password</h3>
                     <div className='sub-group'>
                         <div className='password-sub-group'>

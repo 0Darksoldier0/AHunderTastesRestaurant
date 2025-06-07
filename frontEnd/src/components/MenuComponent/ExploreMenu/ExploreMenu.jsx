@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './ExploreMenu.css'
 
 const ExploreMenu = ({category, setCategory}) => {
+    
     return (
         <div className='explore-menu' id='explore-menu'>
             <h1>Our Menu</h1>

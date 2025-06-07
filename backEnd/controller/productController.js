@@ -1,5 +1,5 @@
 import fs from 'fs'
-import database from '../config/database.js';
+import database from '../config/database.js'
 
 
 // add a product

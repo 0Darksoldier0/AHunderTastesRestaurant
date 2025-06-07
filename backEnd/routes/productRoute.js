@@ -2,6 +2,7 @@ import express from 'express'
 import {addProduct, removeProduct, listProducts, listAvailableProducts, updateProduct, updateProductImage} from '../controller/productController.js'
 import multer from 'multer'
 import { authenticateToken } from '../middleware/authentication.js'
+import {checkAccountType} from  '../middleware/checkAccountType.js'
 
 const productRouter = express.Router();
 
@@ -15,12 +16,12 @@ const storage = multer .diskStorage({
 
 const upload = multer({storage:storage})
 
-productRouter.post("/add", authenticateToken, upload.single("image"), addProduct) 
-productRouter.post("/listall", authenticateToken, listProducts)
+productRouter.post("/add", authenticateToken, checkAccountType, upload.single("image"), addProduct) 
+productRouter.post("/listall", authenticateToken, checkAccountType, listProducts)
 productRouter.get("/listavailable", listAvailableProducts)
-productRouter.post("/remove", authenticateToken, removeProduct)
-productRouter.post("/update", authenticateToken, updateProduct)
-productRouter.post("/updateimage", authenticateToken, upload.single("image"), updateProductImage)
+productRouter.post("/remove", authenticateToken, checkAccountType, removeProduct)
+productRouter.post("/update", authenticateToken, checkAccountType, updateProduct)
+productRouter.post("/updateimage", authenticateToken, checkAccountType, upload.single("image"), updateProductImage)
 
 
 

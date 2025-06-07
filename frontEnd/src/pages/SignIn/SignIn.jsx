@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import './SignIn.css'
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { BACKEND_URL } from '../../../config/constants'
 import { StoreContext } from '../../context/StoreContext'
 import axios from 'axios'
@@ -48,9 +48,7 @@ const SignIn = ({ setMenu }) => {
         }
         catch (error) {
             if (error.response) {
-                if (error.response.data.message === "Invalid Username or Password") {
-                    toast.error("Invalid Username or Password");
-                }
+                toast.error(error.response.data.message);
             }
             else {
                 toast.error("Server error, please try again later");
@@ -74,7 +72,7 @@ const SignIn = ({ setMenu }) => {
                     <button className='signin-btn' type='submit'>Sign In</button>
                     <button className='cancel-btn' onClick={onCLickCancelHandler} type='button'>Cancel</button>
                 </div>
-                <NavLink to='/signup'><p>Create an account</p></NavLink>
+                <Link to='/signup'><p>Create an account</p></Link>
             </div>
         </form>
 

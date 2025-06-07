@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './SignUp.css'
 import { NavLink } from 'react-router-dom'
 import { BACKEND_URL } from '../../../config/constants'
@@ -52,15 +52,7 @@ const SignUp = () => {
         }
         catch (error) {
             if (error.response) {
-                if (error.response.data.message === "Username has already existed") {
-                    toast.error("Username has already existed");
-                }
-                else if (error.response.data.message === "Pasword does not match") {
-                    toast.error("Pasword does not match");
-                }
-                else if (error.response.data.message === "Password is too short") {
-                    toast.error("Password is too short");
-                }
+                toast.error(error.response.data.message);
             }
             else {
                 toast.error("Server error, please try again later");
@@ -109,6 +101,6 @@ const SignUp = () => {
         </div>
     )
 }
-import './SignUp.css'
+
 
 export default SignUp
