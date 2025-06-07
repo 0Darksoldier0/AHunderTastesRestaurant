@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import './Navbar.css'
 import { assets } from '../../assets/assets'
-import {NavLink, useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
 
 const Navbar = ({menu, setMenu}) => {
@@ -30,30 +30,30 @@ const Navbar = ({menu, setMenu}) => {
 
     return (
         <div className='navbar'>
-            <NavLink to='/' onClick={() => setMenu("Home")}><div className='logo'>
+            <Link to='/' onClick={() => setMenu("Home")}><div className='logo'>
                 <img src="" alt="logo" />
                 <p>A Hundred Tastes</p>
-            </div></NavLink>
+            </div></Link>
             <ul className='navbar-menu'>
-                <NavLink to='/' onClick={() => setMenu("Home")} className={menu === "Home" ? "active" : "inactive"}>Home</NavLink>
-                <NavLink to='/aboutUs' onClick={() => setMenu("About Us")} className={menu === "About Us" ? "active" : "inactive"}>About Us</NavLink>
-                <NavLink to='/menu' onClick={() => setMenu("Menu")} className={menu === "Menu" ? "active" : "inactive"}>Menu</NavLink>
+                <Link to='/' onClick={() => setMenu("Home")} className={menu === "Home" ? "active" : "inactive"}>Home</Link>
+                <Link to='/aboutUs' onClick={() => setMenu("About Us")} className={menu === "About Us" ? "active" : "inactive"}>About Us</Link>
+                <Link to='/menu' onClick={() => setMenu("Menu")} className={menu === "Menu" ? "active" : "inactive"}>Menu</Link>
             </ul>
             <div className="navbar-right">
                 <div className="navbar-basket-icon">
-                    <NavLink to='/cart' onClick={() => setMenu("")}><img src={assets.basket_icon} alt="" /></NavLink>
+                    <Link to='/cart' onClick={() => setMenu("")}><img src={assets.basket_icon} alt="" /></Link>
                     <div className={getCartTotalAmount() ? "dot" : ""}></div>
                 </div>
                 {!token 
-                    ?   <NavLink to='/signin' onClick={() => setMenu("")} ><button>Sign In</button></NavLink>
+                    ?   <Link to='/signin' onClick={() => setMenu("")} ><button>Sign In</button></Link>
                     :   <div className='navbar-profile'>
                             <img src={assets.profile_icon} alt="" />
                             <ul className='navbar-profile-dropdown'>
-                                <NavLink to='/orders' onClick={onOrderClickHandler}><p>Orders</p></NavLink>
+                                <Link to='/orders' onClick={onOrderClickHandler}><p>Orders</p></Link>
                                 <hr />
-                                <NavLink to='/account' onClick={onAccountClickHandler}><p>Account</p></NavLink>
+                                <Link to='/account' onClick={onAccountClickHandler}><p>Account</p></Link>
                                 <hr />
-                                <NavLink to='/' onClick={onSignOutClickHandler} className='signout'><p>Sign Out</p></NavLink>
+                                <Link to='/' onClick={onSignOutClickHandler} className='signout'><p>Sign Out</p></Link>
                             </ul>
                         </div>
                 }

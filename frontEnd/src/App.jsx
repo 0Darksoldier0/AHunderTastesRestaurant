@@ -12,10 +12,12 @@ import SignIn from './pages/SignIn/SignIn'
 import SignUp from './pages/SignUp/SignUp'
 import Payment from './pages/Payment/Payment'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import DefaultRoute from './components/DefaultRoute/DefaultRoute'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/ReactToastify.css'
 import { StoreContext } from './context/StoreContext'
 import Account from './pages/Account/Account'
+import ProtectedAndCheckCartAmountRoute from './components/ProtectedAndCheckCartRoute/ProtectedAndCheckCartAmountRoute'
 
 const App = () => {
 
@@ -31,13 +33,14 @@ const App = () => {
                 <Route path='/aboutUs' element={<AboutUs />} />
                 <Route path='/menu' element={<Menu />} />
                 <Route path='/cart' element={<Cart />} />
-                <Route path='/placeOrder' element={<ProtectedRoute><PlaceOrder /></ProtectedRoute>} />
                 <Route path='/signIn' element={<SignIn setMenu={setMenu} />} />
                 <Route path='/signUp' element={<SignUp />} />
                 <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
-                <Route path='/payment' element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+                <Route path='/placeOrder' element={<ProtectedAndCheckCartAmountRoute><PlaceOrder /></ProtectedAndCheckCartAmountRoute>} />
+                <Route path='/payment' element={<ProtectedAndCheckCartAmountRoute><Payment /></ProtectedAndCheckCartAmountRoute>} />
 
                 <Route path="*" element={<ProtectedRoute></ProtectedRoute>} />
+                <Route path="*" element={<DefaultRoute></DefaultRoute>} />
             </Routes>
             <Footer />
         </div>

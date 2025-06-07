@@ -11,7 +11,7 @@ const AddProduct = () => {
 
     const navigate = useNavigate();
 
-    const {token} = useContext(StoreContext);
+    const {token, fetchFoodList} = useContext(StoreContext);
 
     const [image, setImage] = useState(false);
     const [isAvailable, setIsAvailable] = useState(true);
@@ -43,9 +43,9 @@ const AddProduct = () => {
 
 
     // for debug
-    useEffect(() => {
-        console.log(data)
-    }, [data])
+    // useEffect(() => {
+    //     console.log(data)
+    // }, [data])
 
     const onAddClickHandler = async (event) => {
         event.preventDefault();
@@ -71,11 +71,12 @@ const AddProduct = () => {
                         price: "",
                         description: "",
                         category_id: "10",
-                        availability: 0
+                        availability: 1
                     });
                     setImage(false);
                     setIsAvailable(true);
                     toast.success(response.data.message)
+                    await fetchFoodList(token);
                 } else {
                     toast.error(response.data.message || "Failed to add product.");
 

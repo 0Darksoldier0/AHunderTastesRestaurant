@@ -8,14 +8,10 @@ import EditPopup from '../../EditPopUp/EditPopUp'
 import { StoreContext } from '../../../context/StoreContext'
 
 const MenuList = () => {
-    const { foodList, fetchFoodList } = useContext(StoreContext);
+    const { foodList, fetchFoodList, token } = useContext(StoreContext);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null); // State to store the product being edited
     const [image, setImage] = useState(false);
-
-    useEffect(() => {
-        fetchFoodList()
-    }, [])
 
     const mapCategoryIdToName = (id) => {
         switch (id) {
@@ -27,8 +23,8 @@ const MenuList = () => {
     }
 
     const removeProduct = async (product_id) => {
-        const response = await axios.post(`${BACKEND_URL}/api/product/remove`, { product_id: product_id });
-        await fetchFoodList();
+        const response = await axios.post(`${BACKEND_URL}/api/product/remove`, { product_id: product_id }, {headers: {token}});
+        await fetchFoodList(token);
 
         if (response.status === 200) {
             toast.success(response.data.message);
@@ -49,8 +45,8 @@ const MenuList = () => {
         setCurrentProduct(null);
     };
 
-    const onUpdateSuccessHandler = () => {
-        fetchFoodList(); // Re-fetch products after a successful update
+    const onUpdateSuccessHandler = async () => {
+        await fetchFoodList(token); // Re-fetch products after a successful update
     };
 
     const onSaveImageClickHandler = async (item) => {
@@ -60,7 +56,7 @@ const MenuList = () => {
         formData.append("product_id", item.product_id);
 
         try {
-                const response = await axios.post(`${BACKEND_URL}/api/product/updateimage`, formData);
+                const response = await axios.post(`${BACKEND_URL}/api/product/updateimage`, formData, {headers: {token}});
                 if (response.status === 200) {
                     fetchFoodList()
                     setImage(false);

@@ -13,11 +13,13 @@ const userSignIn = async (req, res) => {
     try {
         const [results] = await database.promise().query(select_query, [username]);
         if (results.length <= 0) {
+            console.log("(UserSignIn) Invalid username");
             return res.status(401).json({ message: "Invalid Username or Password" })
         }
 
         const isPasswordMatch = await bcrypt.compare(password, results[0].password);
         if (!isPasswordMatch) {
+            console.log("(UserSignIn) Invalid password");
             return res.status(401).json({ message: "Invalid Username or Password" });
         }
 
@@ -25,8 +27,8 @@ const userSignIn = async (req, res) => {
         return res.status(200).json({ token });
     }
     catch (error) {
-        console.error("Failed to login user", error);
-        return res.status(500).json({ message: error.message });
+        console.error("(UserSignIn) Error signing in user: ", error);
+        return res.status(500).json({ message: "Error logging in user" });
     }
 }
 
@@ -41,14 +43,17 @@ const userSignUp = async (req, res) => {
         const [results] = await database.promise().query(select_query, [username])
 
         if (results.length > 0) {
+            console.log("(UserSignUp) Username has already existed");
             return res.status(409).json({ message: "Username has already existed" })
         }
 
         if (password !== retype_password) {
+            console.log("(UserSignUp) Password does not match");
             return res.status(406).json({ message: "Pasword does not match" });
         }
 
         if (password.length < 8) {
+            console.log("(UserSignUp) Password is too short");
             return res.status(406).json({ message: "Password is too short" });
         }
 
@@ -61,7 +66,7 @@ const userSignUp = async (req, res) => {
         return res.status(200).json({ message: "User added" });
     }
     catch (error) {
-
+        console.error("(UserSignUp) Error signing up user: ", error);
         res.status(500).json({ message: error.message });
     }
 }
@@ -75,6 +80,7 @@ const getUserData = async (req, res) => {
         return res.status(200).json({ userData: results[0] })
     }
     catch (error) {
+        console.error("(GetUserData) Error geting user data: ", error);
         return res.status(500).json({ message: "Unable to fetch user data" });
     }
 }
@@ -88,6 +94,7 @@ const getUsers = async (req, res) => {
         return res.status(200).json({ users: results, message: "Users fetched" });
     }
     catch (error) {
+        console.log("(GetUsers) Error fetching users: ", error);
         return res.status(500).json({ message: "Unable to fetch users" });
     }
 }
@@ -102,6 +109,7 @@ const updateUserFirstName = async (req, res) => {
         return res.status(200).json({ message: "First name updated" });
     }
     catch (error) {
+        console.error("(UpdateUserFirstname) Error updating user first name: ", error);
         return res.status(500).json({ message: "Unable to update user firstname" });
     }
 }
@@ -116,6 +124,7 @@ const updateUserLastName = async (req, res) => {
         return res.status(200).json({ message: "Last name updated" });
     }
     catch (error) {
+        console.error("(UpdateUserLastname) Error updating user last name: ", error);
         return res.status(500).json({ message: "Unable to update user last name" });
     }
 }
@@ -132,14 +141,17 @@ const updateUserPassword = async (req, res) => {
         const isPasswordMatch = await bcrypt.compare(old_password, results[0].password);
 
         if (!isPasswordMatch) {
+            console.log("(UpdateUserPassword) Invalid password");
             return res.status(401).json({ message: "Invalid password" });
         }
 
         if (new_password !== retype_new_password) {
+            console.log("(UpdateUserPassword) New password does not match");
             return res.status(406).json({ message: "New password does not match" })
         }
 
         if (new_password.length < 8) {
+            console.log("(UpdateUserPassword) New password is too short");
             return res.status(406).json({ message: "New password is too short" });
         }
 
@@ -150,7 +162,8 @@ const updateUserPassword = async (req, res) => {
         return res.status(200).json({ message: "Password updated" });
     }
     catch (error) {
-        return res.status(500).json({ message: error.message });
+        console.log("(UpdateUserPassword) Error updating user password: ", error);
+        return res.status(500).json({ message: "Error updating user password" });
     }
 }
 

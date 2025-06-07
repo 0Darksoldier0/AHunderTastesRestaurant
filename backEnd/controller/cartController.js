@@ -20,10 +20,12 @@ const addToCart = async (req, res) => {
             return res.status(200).json({ message: "Product added to cart" });
         }
         else {
+            console.log("(AddToCart) Username does not exist");
             return res.status(404).json({ message: "Username does not exist" });
         }
     }
     catch (error) {
+        console.error("(AddToCart) Error adding product to cart: ", error);
         return res.status(500).json({ message: "Error adding product to cart" })
     }
 
@@ -55,12 +57,14 @@ const removeFromCart = async (req, res) => {
 
         }
         else {
+            console.log("(RemoveFromCart) Username does not exist");
             return res.status(404).json({ message: "Username does not exist" });
         }
 
     }
     catch (error) {
-        return res.status(500).json({ message: "Error updating product quantity" })
+        console.error("(RemoveFromCart) Error removing product from cart: ", error);
+        return res.status(500).json({ message: "Error removing product from cart" })
     }
 }
 
@@ -74,10 +78,12 @@ const getCart = async (req, res) => {
             return res.status(200).json({ cartData: results[0].cart });
         }
         else {
+            console.log("(GetCart) Username does not exist");
             return res.status(404).json({message: "Username does not exist"});
         }
     }
     catch (error) {
+        console.error("(GetCart) Error fetching products from cart: ", error);
         return res.status(500).json({ message: "Error fetching products from cart" });
     }
 }

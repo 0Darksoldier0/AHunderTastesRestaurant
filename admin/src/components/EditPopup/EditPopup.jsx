@@ -3,8 +3,12 @@ import axios from 'axios';
 import { BACKEND_URL } from '../../config/constants.js';
 import { toast } from 'react-toastify';
 import './EditPopup.css';
+import { useContext } from 'react';
+import { StoreContext } from '../../context/StoreContext.jsx';
 
 const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
+    const { token } = useContext(StoreContext);
+    
     const [editedProductData, setEditedProductData] = useState({
         product_id: product.product_id,
         product_name: product.product_name,
@@ -54,7 +58,7 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
         else {
 
             try {
-                const response = await axios.post(`${BACKEND_URL}/api/product/update`, editedProductData);
+                const response = await axios.post(`${BACKEND_URL}/api/product/update`, editedProductData, {headers: {token}});
                 if (response.status === 200) {
                     onUpdateSuccess();
                     toast.success(response.data.message)

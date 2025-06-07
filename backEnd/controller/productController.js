@@ -1,6 +1,7 @@
 import fs from 'fs'
 import database from '../config/database.js';
 
+
 // add a product
 const addProduct = async (req, res) => {
     let image_filename = `${req.file.filename}`;
@@ -14,9 +15,10 @@ const addProduct = async (req, res) => {
         if (results.length > 0) {
             fs.unlink(`./uploads/${image_filename}`, err => {
                 if (err) {
-                    console.error("Failed to unlink uploaded file", err);
+                    console.error("(AddProduct) Failed to unlink uploaded file", err);
                 }
             });
+            console.log("(AddProduct) Product name has already existed");
             return res.status(409).json({ message: "Product name has already existed" });
         }
         else {
@@ -25,13 +27,13 @@ const addProduct = async (req, res) => {
         }
     }
     catch (error) {
-        console.error("AddProduct error: ", error);
         fs.unlink(`./uploads/${image_filename}`, err => {
             if (err) {
-                console.error("Failed to unlink uploaded file", err);
+                console.error("(AddProduct) Failed to unlink uploaded file", err);
             }
         });
-        return res.status(500).json({ error: error.message });
+        console.error("(AddProduct) Error adding product: ", error);
+        return res.status(500).json({ message: "Error adding product" });
     }
 }
 
@@ -46,8 +48,8 @@ const listProducts = async (req, res) => {
         return res.status(200).json({ products: results })
     }
     catch (error) {
-        console.error("ListProducts error: ", error);
-        return res.status(500).json({ error: error.message });
+        console.error("(ListProducts) Error listing products: ", error);
+        return res.status(500).json({ message: "Error listing products" });
     }
 }
 
@@ -62,8 +64,8 @@ const listAvailableProducts = async (req, res) => {
         return res.status(200).json({ products: results })
     }
     catch (error) {
-        console.error("ListProducts error: ", error);
-        return res.status(500).json({ error: error.message });
+        console.error("{ListAvailableProducts} Error listing available products: ", error);
+        return res.status(500).json({ message: "Error listing available products" });
     }
 }
 
@@ -71,23 +73,27 @@ const listAvailableProducts = async (req, res) => {
 const removeProduct = async (req, res) => {
     const select_query = "SELECT * FROM products WHERE product_id = ?";
     const delete_query = "DELETE FROM products WHERE product_id = ?";
+
     try {
         const [results] = await database.promise().query(select_query, [req.body.product_id]);
         if (results.length <= 0) {
+            console.log("(RemoveProduct) Product not found: ");
             return res.status(404).json({ message: "Product not found" });
         }
         else {
             await database.promise().query(delete_query, [req.body.product_id]);
-            fs.unlink(`uploads/${results[0].image}`, () => {
-                console.error("Fail to unlink product image");
+            fs.unlink(`uploads/${results[0].image}`, (err) => {
+                if (err) {
+                    console.error("(RemoveProduct) Fail to unlink product image");
+                }
             });
-            return res.status(200).json({ message: `'${result[0].product_name} (id:${result[0].product_id})' removed` });
+            return res.status(200).json({ message: "Product removed" });
         }
 
     }
     catch (error) {
-        console.error("DeleteProduct error: ", error);
-        return res.status(500).json({ error: error.message });
+        console.error("(RemoveProduct) Error removing product: ", error);
+        return res.status(500).json({ message: "Error removing product" });
     }
 }
 
@@ -100,8 +106,8 @@ const updateProduct = async (req, res) => {
         return res.status(200).json({ message: "Product updated" });
     }
     catch (error) {
-        console.error("UpdateProduct error: ", error);
-        return res.status(500).json({ error: error.message });
+        console.error("(UpdateProduct) Error updating product: ", error);
+        return res.status(500).json({ message: "Error updating product" });
     }
 }
 
@@ -124,8 +130,6 @@ const updateProductImage = async (req, res) => {
         return res.status(200).json({ image: new_image_filename, message: "Product image updated" });
 
     } catch (error) {
-        console.error("Update product image error", error);
-
         // If the database update failed, we need to clean up the newly uploaded image.
         fs.unlink(`./uploads/${new_image_filename}`, err => {
             if (err) {
@@ -133,9 +137,8 @@ const updateProductImage = async (req, res) => {
             }
         });
 
-        console.error(`Failed to unlink uploaded file: `, err);
-
-        return res.status(500).json({ message: "Server error, product image not updated" });
+        console.error("(UpdateProductImage) Error updating product image: ", error);
+        return res.status(500).json({ message: "Error updating product image" });
     }
 }
 

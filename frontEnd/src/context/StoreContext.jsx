@@ -1,10 +1,13 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { BACKEND_URL } from "../../config/constants";
+import { useLocation } from "react-router-dom";
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
+
+    const location = useLocation();
 
     const [menu, setMenu] = useState(() => {
         const savedMenu = localStorage.getItem("currentMenu");
@@ -14,6 +17,7 @@ const StoreContextProvider = (props) => {
     const [token, setToken] = useState("");
     const [food_list, setFoodList] = useState([]);
     const [userData, setUserData] = useState({});
+
 
     const addToCart = async (product_id) => {
         if (!cartItems[product_id]) {
@@ -68,7 +72,6 @@ const StoreContextProvider = (props) => {
                 await loadCartData(localStorage.getItem("token"));
                 await fetchUserData(localStorage.getItem("token"));
             }
-            setMenu();
         }
         loadData();
     }, [])
@@ -76,6 +79,26 @@ const StoreContextProvider = (props) => {
     useEffect(() => {
         localStorage.setItem("currentMenu", menu);
     }, [menu]);
+
+    useEffect(() => {
+        const path = location.pathname;
+        let newMenu = "Dashboard"; // Default menu item
+
+        if (path === '/') {
+            newMenu = "Home";
+        } else if (path === '/aboutUs') {
+            newMenu = "About Us";
+        } else if (path === '/menu') {
+            newMenu = "Menu";
+        } else if (path === '/onlineOrdersManagement') {
+            newMenu = "Manage Online Orders";
+        }
+
+        // Only update if the newMenu is different from the current menu state
+        if (newMenu !== menu) {
+            setMenu(newMenu);
+        }
+    }, [location.pathname]);
 
     const contextValue = {
         menu,
