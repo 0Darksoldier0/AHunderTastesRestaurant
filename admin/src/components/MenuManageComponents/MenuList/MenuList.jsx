@@ -10,8 +10,10 @@ import { StoreContext } from '../../../context/StoreContext'
 const MenuList = () => {
     const { foodList, fetchFoodList, token } = useContext(StoreContext);
     const [showEditPopup, setShowEditPopup] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState(null); // State to store the product being edited
-    const [image, setImage] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState(null);
+    
+    // State to track the specific product being edited and its new image file
+    const [editingImage, setEditingImage] = useState({ productId: null, file: null });
 
     const mapCategoryIdToName = (id) => {
         switch (id) {
@@ -23,19 +25,26 @@ const MenuList = () => {
     }
 
     const removeProduct = async (product_id) => {
-        const response = await axios.post(`${BACKEND_URL}/api/product/remove`, { product_id: product_id }, {headers: {token}});
-        await fetchFoodList(token);
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/product/remove`, { product_id: product_id }, { headers: { token } });
+            await fetchFoodList(token); // Pass token here
 
-        if (response.status === 200) {
-            toast.success(response.data.message);
-        }
-        else {
-            toast.error(response.data.message)
+            if (response.status === 200) {
+                toast.success(response.data.message);
+            }
+        } 
+        catch (error) {
+            if (error.response) {
+                toast.error(error.response.data.message);
+            }
+            else {
+                toast.error("Server error, please try again later");
+            }
+            
         }
     }
 
     const onClickEditHandler = (product) => {
-        // Ensure availability is a boolean for the checkbox
         setCurrentProduct({ ...product });
         setShowEditPopup(true);
     };
@@ -46,36 +55,42 @@ const MenuList = () => {
     };
 
     const onUpdateSuccessHandler = async () => {
-        await fetchFoodList(token); // Re-fetch products after a successful update
+        await fetchFoodList(token);
     };
 
+    const handleImageChange = (event, productId) => {
+        if (event.target.files && event.target.files[0]) {
+            setEditingImage({ productId: productId, file: event.target.files[0] });
+        }
+    };
+    
     const onSaveImageClickHandler = async (item) => {
+        if (!editingImage.file) {
+            toast.error("Please select an image to save.");
+            return;
+        }
+
         const formData = new FormData();
-        formData.append("image", image);
+        formData.append("image", editingImage.file);
         formData.append("old_image_filename", item.image);
         formData.append("product_id", item.product_id);
 
         try {
-                const response = await axios.post(`${BACKEND_URL}/api/product/updateimage`, formData, {headers: {token}});
-                if (response.status === 200) {
-                    fetchFoodList()
-                    setImage(false);
-                    toast.success(response.data.message)
-                } else {
-                    toast.error(response.data.message || "Failed to add product.");
-
-                }
-            } catch (error) {
-                if (error.response) {
-                    if (error.response.data.message === "Product name has already existed") {
-                        toast.error("Product name has already existed");
-                    }
-                }
-                else {
-                    toast.error("Server error, please try again later");
-                }
-
+            const response = await axios.post(`${BACKEND_URL}/api/product/updateimage`, formData, { headers: { token } });
+            if (response.status === 200) {
+                toast.success(response.data.message);
+                await fetchFoodList(token); // Pass the token to refresh the list
+                setEditingImage({ productId: null, file: null }); // Reset state
+            } 
+        } 
+        catch (error) {
+            if (error.response.data.message) {
+                toast.error(error.response.data.message);
             }
+            else {
+                toast.error("Server error, please try again later");
+            }          
+        }
     }
 
     return (
@@ -99,24 +114,32 @@ const MenuList = () => {
                 </div>
 
                 {foodList.map((item, index) => {
+                    const isEditingThisItem = editingImage.productId === item.product_id;
                     return (
                         <div className='list-table-format' key={index}>
                             <div>
-                                {
-                                    !image
-                                        ? <img className='image-preview' src={`${BACKEND_URL}/images/` + item.image} alt="" />
-                                        : <img src={image ? URL.createObjectURL(image) : assets.upload_area} alt="" />
-                                }
-                                <div className='image-change'>
-                                    {
-                                        !image
-                                            ? <>
-                                                <label className='change-cancel' htmlFor="image">Change</label>
-                                                <input onChange={(event) => setImage(event.target.files[0])} type="file" id='image' hidden required />
-                                            </>
-                                            : <label className='change-cancel' onClick={() => setImage(false)}>Clear</label>
-                                    }
-                                    {image ? <label onClick={() => onSaveImageClickHandler(item)} className='save'>Save</label> : <></>}
+                                <img 
+                                    className='image-preview' 
+                                    src={isEditingThisItem && editingImage.file ? URL.createObjectURL(editingImage.file) : `${BACKEND_URL}/images/` + item.image} 
+                                    alt="Product" 
+                                />
+                                <div className={`image-change ${isEditingThisItem ? 'editing' : ''}`}>
+                                    {!isEditingThisItem ? (
+                                        <>
+                                            <label className='change-cancel' htmlFor={`image-upload-${item.product_id}`}>Change</label>
+                                            <input 
+                                                onChange={(e) => handleImageChange(e, item.product_id)} 
+                                                type="file" 
+                                                id={`image-upload-${item.product_id}`} 
+                                                hidden 
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span className='change-cancel' onClick={() => setEditingImage({ productId: null, file: null })}>Clear</span>
+                                            <label onClick={() => onSaveImageClickHandler(item)} className='save'>Save</label>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                             <p>{item.product_id}</p>
@@ -143,4 +166,4 @@ const MenuList = () => {
     )
 }
 
-export default MenuList
+export default MenuList;

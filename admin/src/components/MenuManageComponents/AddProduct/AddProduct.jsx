@@ -3,7 +3,7 @@ import './AddProduct.css'
 import { assets } from '../../../assets/assets'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { BACKEND_URL, MIN_PRICE} from '../../../../config/constants.js'
+import { BACKEND_URL, MIN_PRICE } from '../../../../config/constants.js'
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../../context/StoreContext'
 
@@ -11,7 +11,7 @@ const AddProduct = () => {
 
     const navigate = useNavigate();
 
-    const {token, fetchFoodList} = useContext(StoreContext);
+    const { token, fetchFoodList } = useContext(StoreContext);
 
     const [image, setImage] = useState(false);
     const [isAvailable, setIsAvailable] = useState(true);
@@ -64,7 +64,7 @@ const AddProduct = () => {
 
             try {
                 console.log(token);
-                const response = await axios.post(`${BACKEND_URL}/api/product/add`, formData, {headers: {token}});
+                const response = await axios.post(`${BACKEND_URL}/api/product/add`, formData, { headers: { token } });
                 if (response.status === 200) {
                     setData({
                         product_name: "",
