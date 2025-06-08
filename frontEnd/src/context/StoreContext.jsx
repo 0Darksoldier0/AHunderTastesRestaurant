@@ -135,7 +135,7 @@ const StoreContextProvider = (props) => {
 
     useEffect(() => {
         const path = location.pathname;
-        let newMenu = "Dashboard"; // Default menu item
+        let newMenu = "";
 
         if (path === '/') {
             newMenu = "Home";
@@ -145,6 +145,9 @@ const StoreContextProvider = (props) => {
             newMenu = "Menu";
         } else if (path === '/onlineOrdersManagement') {
             newMenu = "Manage Online Orders";
+        }
+        else {
+            newMenu = "";
         }
 
         // Only update if the newMenu is different from the current menu state

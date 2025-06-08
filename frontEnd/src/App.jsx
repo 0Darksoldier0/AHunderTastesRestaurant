@@ -16,7 +16,8 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/ReactToastify.css'
 import { StoreContext } from './context/StoreContext'
 import Account from './pages/Account/Account'
-import ProtectedAndCheckCartAmountRoute from './components/ProtectedAndCheckCartRoute/ProtectedAndCheckCartAmountRoute'
+// import ProtectedAndCheckCartAmountRoute from './components/ProtectedAndCheckCartRoute/ProtectedAndCheckCartAmountRoute'
+import VerifyOrder from './pages/VerifyOrder/VerifyOrder'
 
 const App = () => {
 
@@ -35,8 +36,9 @@ const App = () => {
                 <Route path='/signIn' element={<SignIn setMenu={setMenu} />} />
                 <Route path='/signUp' element={<SignUp />} />
                 <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
-                <Route path='/placeOrder' element={<ProtectedAndCheckCartAmountRoute><PlaceOrder /></ProtectedAndCheckCartAmountRoute>} />
-               
+                <Route path='/placeOrder' element={<ProtectedRoute><PlaceOrder /></ProtectedRoute>} />
+                <Route path='/verifyOrder' element={<ProtectedRoute><VerifyOrder /></ProtectedRoute>} />
+                
                 <Route path="*" element={<ProtectedRoute></ProtectedRoute>} />
                 <Route path="*" element={<DefaultRoute></DefaultRoute>} />
             </Routes>
