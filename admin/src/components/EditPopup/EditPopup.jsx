@@ -8,7 +8,7 @@ import { StoreContext } from '../../context/StoreContext.jsx';
 
 const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
     const { token } = useContext(StoreContext);
-
+    
     const [editedProductData, setEditedProductData] = useState({
         product_id: product.product_id,
         product_name: product.product_name,
@@ -45,9 +45,9 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
             if (/^\d*\.?\d*$/.test(value)) {
                 setEditedProductData(data => ({ ...data, [name]: value }));
             }
-        }
+        } 
         else {
-            setEditedProductData(data => ({ ...data, [name]: value }));
+            setEditedProductData(data => ({...data, [name]: value }));
         }
     };
 
@@ -59,12 +59,12 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
         }
         else {
             try {
-                const response = await axios.post(`${BACKEND_URL}/api/product/update`, editedProductData, { headers: { token } });
+                const response = await axios.post(`${BACKEND_URL}/api/product/update`, editedProductData, {headers: {token}});
                 if (response.status === 200) {
                     onUpdateSuccess();
                     toast.success(response.data.message)
                 }
-            }
+            } 
             catch (error) {
                 if (error.response) {
                     toast.error(error.response.data.message);
