@@ -43,25 +43,19 @@ const placeOrder = async (req, res) => {
             },
             quantity: 1
         })
-        console.log("before");
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: "payment",
             success_url: `${FRONTEND_URL}/verify?success=true&orderId=${order_id}`,
             cancel_url: `${FRONTEND_URL}/verify?success=false&orderId=${order_id}`,
-            // Add the payment_method_types here to specify accepted payment methods
-            payment_method_types: ['card'], // Most common, accepts credit/debit cards
-            // You can add more types if needed and if they are enabled in your dashboard for VND, e.g., ['card', 'grabpay']
+            payment_method_types: ['card'],
         })
-        console.log("after")
-        // console.log(shipping_details)
-        return res.status(200).json({message: "success", session_url: session.url}); // Corrected: use session.url
+       
+        return res.status(200).json({session_url: session.url});
     }
     catch (error) {
         console.error("(PlaceOrder) Error placing order: ", error);
-        // You should return a more informative error message to the frontend if possible,
-        // or at least a generic error.
-        return res.status(500).json({message: "Error placing order", error: error.message}) // Include error.message for debugging
+        return res.status(500).json({message: "Error placing order"});
     }
 }
 

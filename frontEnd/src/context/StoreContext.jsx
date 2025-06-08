@@ -146,6 +146,9 @@ const StoreContextProvider = (props) => {
         } else if (path === '/onlineOrdersManagement') {
             newMenu = "Manage Online Orders";
         }
+        else {
+            newMenu = "";
+        }
 
         // Only update if the newMenu is different from the current menu state
         if (newMenu !== menu) {

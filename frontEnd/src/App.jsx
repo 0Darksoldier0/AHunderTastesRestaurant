@@ -11,7 +11,7 @@ import ScrollToTop from './context/ScrollToTop'
 import SignIn from './pages/SignIn/SignIn'
 import SignUp from './pages/SignUp/SignUp'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
-import DefaultRoute from './components/DefaultRoute/DefaultRoute'
+// import DefaultRoute from './components/DefaultRoute/DefaultRoute'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/ReactToastify.css'
 import { StoreContext } from './context/StoreContext'
@@ -35,10 +35,10 @@ const App = () => {
                 <Route path='/signIn' element={<SignIn setMenu={setMenu} />} />
                 <Route path='/signUp' element={<SignUp />} />
                 <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
-                <Route path='/placeOrder' element={<ProtectedAndCheckCartAmountRoute><PlaceOrder /></ProtectedAndCheckCartAmountRoute>} />
-               
-                <Route path="*" element={<ProtectedRoute></ProtectedRoute>} />
-                <Route path="*" element={<DefaultRoute></DefaultRoute>} />
+                <Route path='/placeOrder' element={<ProtectedRoute><PlaceOrder /></ProtectedRoute>} />
+                
+                {/* <Route path="*" element={<ProtectedRoute></ProtectedRoute>} /> */}
+                {/* <Route path="*" element={<DefaultRoute></DefaultRoute>} /> */}
             </Routes>
             <Footer />
         </div>
