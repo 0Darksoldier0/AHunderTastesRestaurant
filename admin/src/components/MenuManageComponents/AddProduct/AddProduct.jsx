@@ -130,7 +130,7 @@ const AddProduct = () => {
                         <p>Availability</p>
                         <label className="switch">
                             <input onChange={onChangeHandler} name='availability' type="checkbox" checked={isAvailable} />
-                            <span className="slider round"></span>
+                            <span className="slider"></span>
                         </label>
                     </div>
                     <div className='button'>

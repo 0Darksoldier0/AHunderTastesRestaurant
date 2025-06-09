@@ -104,9 +104,9 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
                     </div>
                     <div className="add-availability">
                         <p>Availability</p>
-                        <label className="switch">
+                        <label className="switch1">
                             <input onChange={onChangeHandler} name='availability' type="checkbox" checked={isAvailable} />
-                            <span className="slider round"></span>
+                            <span className="slider1"></span>
                         </label>
                     </div>
                     <div className='buttons'>
