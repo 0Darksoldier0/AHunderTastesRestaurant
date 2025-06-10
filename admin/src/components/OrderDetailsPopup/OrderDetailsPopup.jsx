@@ -19,7 +19,6 @@ const OrderDetailsPopup = ({ order, token, onClose }) => {
         }
         // console.log(orderDetails);
     }, [])
-
     return (
         <div className='order-details-container'>
             <div className="order-details-content">
@@ -68,6 +67,4 @@ const OrderDetailsPopup = ({ order, token, onClose }) => {
         </div>
     )
 }
-
-
 export default OrderDetailsPopup

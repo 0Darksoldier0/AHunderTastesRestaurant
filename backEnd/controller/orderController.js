@@ -84,7 +84,7 @@ const getUserOrders = async (req, res) => {
                             FROM online_orders o 
                             JOIN online_order_details od ON o.order_id = od.order_id 
                             JOIN products p ON od.product_id = p.product_id
-                            WHERE o.username = 'admin' and payment is true
+                            WHERE o.username = ? and payment is true
                             GROUP BY o.order_id, o.username, o.order_date
                             ORDER BY o.order_id desc`;
 
@@ -100,19 +100,51 @@ const getUserOrders = async (req, res) => {
 
 const getOrderDetails = async (req, res) => {
     const { order_id } = req.body;
-    const select_query =   `SELECT od.order_id, od.product_id, p.product_name, p.price, od.product_quantity, (p.price * od.product_quantity) as total 
+    const select_query = `SELECT od.order_id, od.product_id, p.product_name, p.price, od.product_quantity, (p.price * od.product_quantity) as total 
                             FROM online_order_details od
                             JOIN products p ON od.product_id = p.product_id
                             WHERE od.order_id = ?` ;
-                            
+
     try {
         const [results] = await database.promise().query(select_query, [order_id]);
-        return res.status(200).json({orderDetails: results});
-    }       
+        return res.status(200).json({ orderDetails: results });
+    }
     catch (error) {
-        console.error("(GetOrderDetails) Error fetching user details");
-        return res.status(500).json({message: "Error fetching user details"})
+        console.error("(GetOrderDetails) Error fetching user details: ", error);
+        return res.status(500).json({ message: "Error fetching user details" })
     }
 }
 
-export { placeOrder, verifyOrder, getUserOrders, getOrderDetails }
+const getOrders = async (req, res) => {
+    const select_query = `SELECT o.order_id, o.order_date, o.shipping_details, sum((p.price * od.product_quantity))  as subtotal, o.status
+                            FROM online_orders o 
+                            JOIN online_order_details od ON o.order_id = od.order_id 
+                            JOIN products p ON od.product_id = p.product_id
+                            WHERE payment is true
+                            GROUP BY o.order_id, o.username, o.order_date
+                            ORDER BY o.order_id desc`;
+    try {
+        const [results] = await database.promise().query(select_query);
+        return res.status(200).json({ orders: results });
+    }
+    catch (error) {
+        console.error("(GetOrders) Error listing orders: ", error);
+        return res.status(500).json({ message: "Error listing orders" })
+    }
+}
+
+const updateStatus = async (req, res) => {
+    const { order_id, status } = req.body;
+    const update_query = "UPDATE online_orders SET status = ? WHERE order_id = ?";
+
+    try {
+        await database.promise().query(update_query, [status, order_id]);
+        return res.status(200).json({ message: "Order status updated" })
+    }
+    catch (error) {
+        console.error("(UpdateStatus) Error updating order status: ", error);
+        return res.status(500).json({ message: "Error updating order status" })
+    }
+}
+
+export { placeOrder, verifyOrder, getUserOrders, getOrderDetails, getOrders, updateStatus }

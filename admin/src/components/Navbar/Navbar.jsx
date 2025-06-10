@@ -30,8 +30,8 @@ const Navbar = () => {
 
                             <Link to='/' onClick={() => printTime()} className={menu === "Dashboard" ? "active" : "inactive"}>Dashboard</Link>
                             <Link to='/menuManagement' onClick={() => setMenu("Manage Menu")} className={menu === "Manage Menu" ? "active" : "inactive"}>Manage Menu</Link>
-                            <Link to='/ordersManagement' onClick={() => setMenu("Manage Orders")} className={menu === "Manage Orders" ? "active" : "inactive"}>Manage Orders</Link>
                             <Link to='/onlineOrdersManagement' onClick={() => setMenu("Manage Online Orders")} className={menu === "Manage Online Orders" ? "active" : "inactive"}>Manage Online Orders</Link>
+                            <Link to='/ordersManagement' onClick={() => setMenu("Manage Orders")} className={menu === "Manage Orders" ? "active" : "inactive"}>Manage Orders</Link>
                         </ul>
                         <div className="navbar-right">
                             <button onClick={onSignOutClickHandler}>Sign Out</button>

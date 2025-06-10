@@ -25,8 +25,8 @@ const App = () => {
                 <Route path='/' element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path='/menuManagement' element={<ProtectedRoute><MenuManagement /></ProtectedRoute>} />
                 <Route path='/menuManagement/addProduct' element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
-                <Route path='/ordersManagement' element={<ProtectedRoute><OrdersManagement /></ProtectedRoute>} />
                 <Route path='/onlineOrdersManagement' element={<ProtectedRoute><OnlineOrdersManagement /></ProtectedRoute>} />
+                <Route path='/ordersManagement' element={<ProtectedRoute><OrdersManagement /></ProtectedRoute>} />
 
                 <Route path="*" element={<DefaultRoute></DefaultRoute>} />
             </Routes>

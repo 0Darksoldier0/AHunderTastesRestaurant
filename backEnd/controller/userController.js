@@ -6,6 +6,34 @@ const createToken = (username, type) => {
     return jwt.sign({ username, type }, process.env.ACCESS_TOKEN);
 }
 
+const adminSignIn = async (req, res) => {
+    const { username, password } = req.body;
+    const select_query = "SELECT * FROM users WHERE username = ? and type = 0";
+    try {
+        const [results] = await database.promise().query(select_query, [username]);
+        if (results.length <= 0) {
+            console.log("(AdminSignIn) Invalid username");
+            return res.status(401).json({ message: "Invalid Username or Password" })
+        }
+        if (results[0].type !== 0) {
+            console.log("(AdminSignIn) Not admin account");
+            return res.status(403).json({ message: "Invalid Username or Password" })
+        }
+        const isPasswordMatch = await bcrypt.compare(password, results[0].password);
+        if (!isPasswordMatch) {
+            console.log("(AdminSignIn) Invalid password");
+            return res.status(401).json({ message: "Invalid Username or Password" });
+        }
+
+        const token = createToken(results[0].username, results[0].type);
+        return res.status(200).json({ token });
+    }
+    catch (error) {
+        console.error("(AdminSignIn) Error signing in user: ", error);
+        return res.status(500).json({ message: "Error logging in user" });
+    }
+}
+
 // user sign in
 const userSignIn = async (req, res) => {
     const { username, password } = req.body;
@@ -167,4 +195,4 @@ const updateUserPassword = async (req, res) => {
     }
 }
 
-export { userSignIn, userSignUp, getUserData, getUsers, updateUserFirstName, updateUserLastName, updateUserPassword }
+export { adminSignIn, userSignIn, userSignUp, getUserData, getUsers, updateUserFirstName, updateUserLastName, updateUserPassword }

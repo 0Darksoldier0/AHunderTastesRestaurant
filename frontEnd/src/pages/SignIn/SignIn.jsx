@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const SignIn = ({ setMenu }) => {
 
-    const { setToken, loadCartData } = useContext(StoreContext);
+    const { setToken, loadCartData, fetchUserData, fetchUserOrders } = useContext(StoreContext);
 
     const navigate = useNavigate();
 
@@ -43,6 +43,9 @@ const SignIn = ({ setMenu }) => {
                     password: ""
                 });
                 loadCartData(response.data.token);
+                fetchUserData(response.data.token);
+                fetchUserOrders(response.data.token);
+                
                 navigate('/');
             }
         }

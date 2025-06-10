@@ -17,35 +17,49 @@ const StoreContextProvider = (props) => {
 
     const [token, setToken] = useState("");
     const [foodList, setFoodList] = useState([]);
+    const [ordersData, setOrdersData] = useState([]);
 
     const fetchFoodList = async (token) => {
         try {
-            // console.log("Fetching foodlist...")
             const response = await axios.post(`${BACKEND_URL}/api/product/listall`, {}, { headers: { token } });
 
             if (response.status == 200) {
-                // console.log("Foodlist fetched successfully");
                 setFoodList(response.data.products);
             }
         }
         catch (error) {
             console.error("Error listing products:", error.response ? error.response.data : error.message);
             toast.error(error.response ? error.response.data.message : "An error occurred while listing the products");
-
         }
     }
 
-    // useEffect(() => {
-    //     console.log(foodList)
-    // }, [foodList])
+    const fetchOrders = async (token) => {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/order/list`, {}, { headers: { token } });
+            if (response.status === 200) {
+                setOrdersData(response.data.orders);
+                console.log(response.data.orders);
+            }
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(FetchOrders): " + error.response.data.message);
+            }
+            else {
+                console.error("Server error, please try again later");
+                toast.error("Error fetching orders")
+            }
+        }
+    }
 
     useEffect(() => {
         async function loadData() {
             if (localStorage.getItem("token")) {
                 setToken(localStorage.getItem("token"));
                 await fetchFoodList(localStorage.getItem("token"));
+                await fetchOrders(localStorage.getItem("token"))
+                console.log("run");
             }
-            // setMenu(); // very important to maintain correct display behavior of Navbar :))) 
         }
         loadData();
     }, [])
@@ -56,26 +70,24 @@ const StoreContextProvider = (props) => {
 
     useEffect(() => {
         const path = location.pathname;
-        let newMenu = "Dashboard"; // Default menu item
+        let newMenu = "Dashboard";
 
         if (path === '/') {
             newMenu = "Dashboard";
-        } 
+        }
         else if (path === '/menuManagement' || path === "/menuManagement/addProduct") {
             newMenu = "Manage Menu";
-        } 
+        }
         else if (path === '/ordersManagement') {
             newMenu = "Manage Orders";
-        } 
+        }
         else if (path === '/onlineOrdersManagement') {
             newMenu = "Manage Online Orders";
-        } 
+        }
         else if (path === '/signIn') {
-            // If on sign-in page, you might want to clear or set a specific menu
-            newMenu = ""; // Or any other appropriate value
+            newMenu = "";
         }
 
-        // Only update if the newMenu is different from the current menu state
         if (newMenu !== menu) {
             setMenu(newMenu);
         }
@@ -84,10 +96,12 @@ const StoreContextProvider = (props) => {
     const contextValue = {
         menu,
         setMenu,
-        foodList,
         token,
         setToken,
-        fetchFoodList
+        foodList,
+        fetchFoodList,
+        ordersData,
+        fetchOrders
     }
 
     return (

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const SignIn = () => {
 
-    const { setToken, setMenu} = useContext(StoreContext);
+    const { setToken, setMenu, fetchFoodList, fetchOrders} = useContext(StoreContext);
 
     const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const SignIn = () => {
     const onSignIn = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/user/signIn`, data);
+            const response = await axios.post(`${BACKEND_URL}/api/user/adminSignIn`, data);
 
             if (response.status === 200) {
                 setToken(response.data.token);
@@ -43,6 +43,9 @@ const SignIn = () => {
                     username: "",
                     password: ""
                 });
+                fetchFoodList(response.data.token);
+                fetchOrders(response.data.token);
+                
                 navigate('/');
                 setMenu("Dashboard")
             }
