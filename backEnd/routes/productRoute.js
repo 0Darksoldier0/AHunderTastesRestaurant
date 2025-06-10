@@ -1,5 +1,5 @@
 import express from 'express'
-import {addProduct, removeProduct, listProducts, listAvailableProducts, updateProduct, updateProductImage} from '../controller/productController.js'
+import {addProduct, removeProduct, listProducts, listAvailableProducts, updateProduct, updateProductImage, getProductPrice} from '../controller/productController.js'
 import multer from 'multer'
 import { authenticateToken } from '../middleware/authentication.js'
 import {checkAccountType} from  '../middleware/checkAccountType.js'
@@ -22,7 +22,7 @@ productRouter.get("/listavailable", listAvailableProducts)
 productRouter.post("/remove", authenticateToken, checkAccountType, removeProduct)
 productRouter.post("/update", authenticateToken, checkAccountType, updateProduct)
 productRouter.post("/updateimage", authenticateToken, checkAccountType, upload.single("image"), updateProductImage)
-
+productRouter.post("/getprice", authenticateToken, checkAccountType, getProductPrice)
 
 
 export default productRouter;

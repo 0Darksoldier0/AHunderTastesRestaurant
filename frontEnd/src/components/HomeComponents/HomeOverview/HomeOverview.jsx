@@ -3,13 +3,12 @@ import './HomeOverview.css'
 import {Link} from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 
-const HomeOverview = ({setMenu}) => {
+const HomeOverview = () => {
 
     const navigate = useNavigate();
 
     const handleExploreMenu = () => {
         navigate('/menu'); // Navigate to the Home page
-        setMenu("Menu"); // Set the Navbar's active menu to "Home"
     };
 
     return (

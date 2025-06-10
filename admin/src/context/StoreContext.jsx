@@ -18,6 +18,9 @@ const StoreContextProvider = (props) => {
     const [token, setToken] = useState("");
     const [foodList, setFoodList] = useState([]);
     const [ordersData, setOrdersData] = useState([]);
+    
+    // Data visulization
+    const [priceData, setPriceData] = useState([]);
 
     const fetchFoodList = async (token) => {
         try {
@@ -28,8 +31,13 @@ const StoreContextProvider = (props) => {
             }
         }
         catch (error) {
-            console.error("Error listing products:", error.response ? error.response.data : error.message);
-            toast.error(error.response ? error.response.data.message : "An error occurred while listing the products");
+            if (error.response) {
+                console.error("(FetchFoodList-StoreContext) ", error.response.data.message);
+            }
+            else {
+                console.error("(FetchFoodList) Server error")
+            }
+            
         }
     }
 
@@ -38,16 +46,33 @@ const StoreContextProvider = (props) => {
             const response = await axios.post(`${BACKEND_URL}/api/order/list`, {}, { headers: { token } });
             if (response.status === 200) {
                 setOrdersData(response.data.orders);
-                console.log(response.data.orders);
+                // console.log(response.data.orders);
             }
         }
         catch (error) {
             if (error.response) {
-                console.error("(FetchOrders): " + error.response.data.message);
+                console.error("(FetchOrders) " + error.response.data.message);
             }
             else {
-                console.error("Server error, please try again later");
-                toast.error("Error fetching orders")
+                console.error("(FetchOrders) Server error");
+            }
+        }
+    }
+
+    const fetchProductPrice = async (token) => {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/product/getprice`, {}, {headers: {token}})
+            if (response.status === 200) {
+                setPriceData(response.data.data);
+                console.log(response.data.data);
+            }
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(FetchProductPrice) ", error.response.data.message)
+            }
+            else {
+                console.error("(FetchProductPrice) Server error")
             }
         }
     }
@@ -58,7 +83,7 @@ const StoreContextProvider = (props) => {
                 setToken(localStorage.getItem("token"));
                 await fetchFoodList(localStorage.getItem("token"));
                 await fetchOrders(localStorage.getItem("token"))
-                console.log("run");
+                await fetchProductPrice(localStorage.getItem("token"))
             }
         }
         loadData();
@@ -84,7 +109,7 @@ const StoreContextProvider = (props) => {
         else if (path === '/onlineOrdersManagement') {
             newMenu = "Manage Online Orders";
         }
-        else if (path === '/signIn') {
+        else {
             newMenu = "";
         }
 
@@ -101,7 +126,10 @@ const StoreContextProvider = (props) => {
         foodList,
         fetchFoodList,
         ordersData,
-        fetchOrders
+        fetchOrders,
+
+        priceData,
+        fetchProductPrice
     }
 
     return (

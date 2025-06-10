@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext.jsx';
 
 const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
-    const { token } = useContext(StoreContext);
+    const { token, fetchProductPrice } = useContext(StoreContext);
     
     const [editedProductData, setEditedProductData] = useState({
         product_id: product.product_id,
@@ -62,7 +62,8 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
                 const response = await axios.post(`${BACKEND_URL}/api/product/update`, editedProductData, {headers: {token}});
                 if (response.status === 200) {
                     onUpdateSuccess();
-                    toast.success(response.data.message)
+                    toast.success(response.data.message);
+                    await fetchProductPrice(token);
                 }
             } 
             catch (error) {

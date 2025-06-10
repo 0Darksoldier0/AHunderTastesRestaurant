@@ -19,3 +19,13 @@ hr {
   height: 1px;
   background-color: rgb(220, 220, 220);
 }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

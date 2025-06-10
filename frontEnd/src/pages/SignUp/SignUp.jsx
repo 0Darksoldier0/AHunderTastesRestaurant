@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './SignUp.css'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { BACKEND_URL } from '../../../config/constants'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { StoreContext } from '../../context/StoreContext'
 
 const SignUp = () => {
+
+    const {token} = useContext(StoreContext);
+
+    const navigate = useNavigate();
 
     const [data, setData] = useState({
         username: "",
@@ -60,6 +65,12 @@ const SignUp = () => {
         }
 
     }
+
+    useEffect(() => {
+            if (token) {
+                navigate('/')
+            }
+        }, [token])
 
     // useEffect(() => {
     //     console.log(data)

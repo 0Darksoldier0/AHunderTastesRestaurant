@@ -5,10 +5,11 @@ import { BACKEND_URL } from '../../../config/constants'
 import { StoreContext } from '../../context/StoreContext'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 const SignIn = () => {
 
-    const { setToken, setMenu, fetchFoodList, fetchOrders} = useContext(StoreContext);
+    const { token, setToken, setMenu, fetchFoodList, fetchOrders} = useContext(StoreContext);
 
     const navigate = useNavigate();
 
@@ -62,6 +63,13 @@ const SignIn = () => {
         }
 
     }
+
+    useEffect(() => {
+        if (token) {
+            navigate('/');
+        }
+    }, [token]);
+
     return (
 
         <form className='signin-container' onSubmit={onSignIn}>

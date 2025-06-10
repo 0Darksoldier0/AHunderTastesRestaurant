@@ -1,15 +1,10 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-const DefaultRoute = ({ children }) => {
-    
-    const token = localStorage.getItem("token"); 
-    
-    if (token) {
-        return <Navigate to="/" replace />;
-    }
+const DefaultRoute = () => {
 
-    return children;
+    return <Navigate to="/" replace />;
+
 };
 
 export default DefaultRoute;

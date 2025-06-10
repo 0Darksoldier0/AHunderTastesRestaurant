@@ -5,8 +5,11 @@ import { BACKEND_URL } from '../../../config/constants'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const PlaceOrder = () => {
+
+    const navigate = useNavigate();
 
     const { getCartTotalAmount, token, food_list, cartItems } = useContext(StoreContext);
     const deliveryFee = 35000;
@@ -67,6 +70,12 @@ const PlaceOrder = () => {
             }
         }
     }
+
+    useEffect(() => {
+        if (getCartTotalAmount() === 0) {
+            navigate('/menu')
+        }
+    })
 
     return (
         <form className='place-order' onSubmit={onProcessToPaymentClickHandler}>

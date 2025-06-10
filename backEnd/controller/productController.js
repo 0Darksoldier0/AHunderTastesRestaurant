@@ -142,4 +142,17 @@ const updateProductImage = async (req, res) => {
     }
 }
 
-export { addProduct, listProducts, listAvailableProducts, removeProduct, updateProduct, updateProductImage }
+const getProductPrice = async (req, res) => {
+    const select_query = "SELECT product_name, price, category_id FROM products ORDER BY availability desc, category_id asc";
+    
+    try {
+        const [results] = await database.promise().query(select_query);
+        return res.status(200).json({data: results});
+    }
+    catch (error) {
+        console.error("(GetProductPrice) Error fetching product price: ", error);
+        return res.status(500).json({message: "Error fetching product price"})
+    }
+}
+
+export { addProduct, listProducts, listAvailableProducts, removeProduct, updateProduct, updateProductImage, getProductPrice }

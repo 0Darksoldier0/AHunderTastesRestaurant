@@ -7,13 +7,12 @@ const Navbar = () => {
 
     const navigate = useNavigate();
 
-    const { token, setToken, menu, setMenu } = useContext(StoreContext);
+    const { token, setToken, menu } = useContext(StoreContext);
 
     const onSignOutClickHandler = () => {
-        setMenu("");
-        setToken("");
-        navigate('/signIn');
+        setToken("");   
         localStorage.removeItem("token");
+        navigate('/signIn'); 
         window.location.reload();
     }
 
@@ -28,10 +27,10 @@ const Navbar = () => {
                     ? <>
                         <ul className='navbar-menu'>
 
-                            <Link to='/' onClick={() => printTime()} className={menu === "Dashboard" ? "active" : "inactive"}>Dashboard</Link>
-                            <Link to='/menuManagement' onClick={() => setMenu("Manage Menu")} className={menu === "Manage Menu" ? "active" : "inactive"}>Manage Menu</Link>
-                            <Link to='/onlineOrdersManagement' onClick={() => setMenu("Manage Online Orders")} className={menu === "Manage Online Orders" ? "active" : "inactive"}>Manage Online Orders</Link>
-                            <Link to='/ordersManagement' onClick={() => setMenu("Manage Orders")} className={menu === "Manage Orders" ? "active" : "inactive"}>Manage Orders</Link>
+                            <Link to='/' className={menu === "Dashboard" ? "active" : "inactive"}>Dashboard</Link>
+                            <Link to='/menuManagement' className={menu === "Manage Menu" ? "active" : "inactive"}>Manage Menu</Link>
+                            <Link to='/onlineOrdersManagement' className={menu === "Manage Online Orders" ? "active" : "inactive"}>Manage Online Orders</Link>
+                            <Link to='/ordersManagement' className={menu === "Manage Orders" ? "active" : "inactive"}>Manage Orders</Link>
                         </ul>
                         <div className="navbar-right">
                             <button onClick={onSignOutClickHandler}>Sign Out</button>

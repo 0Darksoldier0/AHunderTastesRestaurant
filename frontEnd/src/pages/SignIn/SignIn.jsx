@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './SignIn.css'
 import { useNavigate, Link } from 'react-router-dom';
 import { BACKEND_URL } from '../../../config/constants'
@@ -6,9 +6,9 @@ import { StoreContext } from '../../context/StoreContext'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 
-const SignIn = ({ setMenu }) => {
+const SignIn = () => {
 
-    const { setToken, loadCartData, fetchUserData, fetchUserOrders } = useContext(StoreContext);
+    const { token, setToken, loadCartData, fetchUserData, fetchUserOrders } = useContext(StoreContext);
 
     const navigate = useNavigate();
 
@@ -62,8 +62,13 @@ const SignIn = ({ setMenu }) => {
 
     const onCLickCancelHandler = () => {
         navigate('/');
-        setMenu("Home");
     };
+
+    useEffect(() => {
+        if (token) {
+            navigate('/')
+        }
+    }, [token])
 
     return (
         <form className='sign-in' onSubmit={onSignIn}>

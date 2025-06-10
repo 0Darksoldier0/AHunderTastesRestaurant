@@ -4,11 +4,11 @@ import { assets } from '../../assets/assets'
 import {Link, useNavigate} from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
 
-const Navbar = ({menu, setMenu}) => {
+const Navbar = () => {
 
     const navigate = useNavigate();
 
-    const {getCartTotalAmount, token, setToken} = useContext(StoreContext);
+    const {getCartTotalAmount, token, setToken, menu, setMenu} = useContext(StoreContext);
 
     const onSignOutClickHandler = () => {
         localStorage.removeItem("token");
@@ -30,22 +30,22 @@ const Navbar = ({menu, setMenu}) => {
 
     return (
         <div className='navbar'>
-            <Link to='/' onClick={() => setMenu("Home")}><div className='logo'>
+            <Link to='/'><div className='logo'>
                 <img src="" alt="logo" />
                 <p>A Hundred Tastes</p>
             </div></Link>
             <ul className='navbar-menu'>
-                <Link to='/' onClick={() => setMenu("Home")} className={menu === "Home" ? "active" : "inactive"}>Home</Link>
-                <Link to='/aboutUs' onClick={() => setMenu("About Us")} className={menu === "About Us" ? "active" : "inactive"}>About Us</Link>
-                <Link to='/menu' onClick={() => setMenu("Menu")} className={menu === "Menu" ? "active" : "inactive"}>Menu</Link>
+                <Link to='/' className={menu === "Home" ? "active" : "inactive"}>Home</Link>
+                <Link to='/aboutUs' className={menu === "About Us" ? "active" : "inactive"}>About Us</Link>
+                <Link to='/menu' className={menu === "Menu" ? "active" : "inactive"}>Menu</Link>
             </ul>
             <div className="navbar-right">
                 <div className="navbar-basket-icon">
-                    <Link to='/cart' onClick={() => setMenu("")}><img src={assets.basket_icon} alt="" /></Link>
+                    <Link to='/cart'><img src={assets.basket_icon} alt="" /></Link>
                     <div className={getCartTotalAmount() ? "dot" : ""}></div>
                 </div>
                 {!token 
-                    ?   <Link to='/signin' onClick={() => setMenu("")} ><button>Sign In</button></Link>
+                    ?   <Link to='/signin' ><button>Sign In</button></Link>
                     :   <div className='navbar-profile'>
                             <img src={assets.profile_icon} alt="" />
                             <ul className='navbar-profile-dropdown'>

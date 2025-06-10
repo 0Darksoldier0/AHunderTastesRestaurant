@@ -115,10 +115,10 @@ const StoreContextProvider = (props) => {
         }
         catch (error) {
             if (error.response) {
-                console.error("(FetchUserData from StoreContext) " + error.response.data.message);
+                console.error("(FetchUserData-StoreContext) " + error.response.data.message);
             }
             else {
-                console.error("(FetchUserData from StoreContext) Server error");
+                console.error("(FetchUserData-StoreContext) Server error");
             }
         }
         
@@ -144,14 +144,12 @@ const StoreContextProvider = (props) => {
 
     useEffect(() => {
         async function loadData() {
-            console.log("runnnnnnnnnnnnn out");
             await fetchFoodList();
             if (localStorage.getItem("token")) {
                 setToken(localStorage.getItem("token"));
                 await loadCartData(localStorage.getItem("token"));
                 await fetchUserData(localStorage.getItem("token"));
                 await fetchUserOrders(localStorage.getItem("token"));
-                console.log("runnnnnnnnnnnnn in");
             }
         }
         loadData();
@@ -163,7 +161,7 @@ const StoreContextProvider = (props) => {
 
     useEffect(() => {
         const path = location.pathname;
-        let newMenu = "";
+        let newMenu = "Home";
 
         if (path === '/') {
             newMenu = "Home";
@@ -171,14 +169,11 @@ const StoreContextProvider = (props) => {
             newMenu = "About Us";
         } else if (path === '/menu') {
             newMenu = "Menu";
-        } else if (path === '/onlineOrdersManagement') {
-            newMenu = "Manage Online Orders";
         }
         else {
             newMenu = "";
         }
 
-        // Only update if the newMenu is different from the current menu state
         if (newMenu !== menu) {
             setMenu(newMenu);
         }

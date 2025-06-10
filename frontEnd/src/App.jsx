@@ -16,35 +16,31 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/ReactToastify.css'
 import { StoreContext } from './context/StoreContext'
 import Account from './pages/Account/Account'
-// import ProtectedAndCheckCartAmountRoute from './components/ProtectedAndCheckCartRoute/ProtectedAndCheckCartAmountRoute'
 import VerifyOrder from './pages/VerifyOrder/VerifyOrder'
 import Orders from './pages/Orders/Orders'
 
 const App = () => {
 
-    const {menu, setMenu} = useContext(StoreContext);
-
     return (
         <div className='app'>
             <ToastContainer />
             <ScrollToTop />
-            <Navbar menu={menu} setMenu={setMenu} />
+            <Navbar />
             <Routes>
-                <Route path='/' element={<Home setMenu={setMenu} />} />
+                <Route path='/' element={<Home />} />
                 <Route path='/aboutUs' element={<AboutUs />} />
                 <Route path='/menu' element={<Menu />} />
                 <Route path='/cart' element={<Cart />} />
                 
-                <Route path='/signIn' element={<SignIn setMenu={setMenu} />} />
+                <Route path='/signIn' element={<SignIn />} />
                 <Route path='/signUp' element={<SignUp />} />
 
-                <Route path='/orders' element={<Orders />} />
+                <Route path='/orders' element={<ProtectedRoute><Orders /></ProtectedRoute>} />
                 <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
 
                 <Route path='/placeOrder' element={<ProtectedRoute><PlaceOrder /></ProtectedRoute>} />
                 <Route path='/verifyOrder' element={<ProtectedRoute><VerifyOrder /></ProtectedRoute>} />
                 
-                <Route path="*" element={<ProtectedRoute></ProtectedRoute>} />
                 <Route path="*" element={<DefaultRoute></DefaultRoute>} />
             </Routes>
             <Footer />

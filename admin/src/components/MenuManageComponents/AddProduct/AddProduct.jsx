@@ -11,7 +11,7 @@ const AddProduct = () => {
 
     const navigate = useNavigate();
 
-    const {token, fetchFoodList} = useContext(StoreContext);
+    const {token, fetchFoodList, fetchProductPrice} = useContext(StoreContext);
 
     const [image, setImage] = useState(false);
     const [isAvailable, setIsAvailable] = useState(true);
@@ -77,6 +77,7 @@ const AddProduct = () => {
                     setIsAvailable(true);
                     toast.success(response.data.message)
                     await fetchFoodList(token);
+                    await fetchProductPrice(token);
                 }
             } catch (error) {
                 if (error.response) {
