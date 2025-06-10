@@ -14,6 +14,10 @@ const OnlineOrdersManagement = () => {
     const { token, ordersData} = useContext(StoreContext);
     const [showOrderDetailsPopup, setShowOrderDetailsPopup] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(null);
+    
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
 
     const onSelectStatusHandler = async (event, order_id) => {
         const currentStatus = event.target.value;
@@ -46,9 +50,19 @@ const OnlineOrdersManagement = () => {
         setShowOrderDetailsPopup(false);
     };
 
+    const filteredOrders = ordersData.filter(order => {
+        const orderDate = new Date(order.order_date);
+        const start = startDate ? new Date(startDate) : null;
+        const end = endDate ? new Date(endDate) : null;
+
+        return order.status === "delivered" &&
+               (!start || orderDate >= start) &&
+               (!end || orderDate <= end);
+    });
+
     return (
         <div className='orders'>
-            <h1>My Orders</h1>
+            <h1>All Orders</h1>
             <h2>Waiting to be delivered</h2>
             <div className='titles'>
                 <p></p>
@@ -75,19 +89,32 @@ const OnlineOrdersManagement = () => {
                 })}
             </div>
             <h2>Completed Orders</h2>
+            <div className="date-range-selector">
+                <label htmlFor="startDate">Start Date:</label>
+                <input
+                    type="date"
+                    id="startDate"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                />
+                <label htmlFor="endDate">End Date:</label>
+                <input
+                    type="date"
+                    id="endDate"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                />
+            </div>
             <div className='order-incomplete-complete'>
-
-                {ordersData.map((order, index) => {
-                    if (order.status === "delivered") {
-                        return (
-                            <div key={index} className='titles orders-order'>
-                                <img src={assets.parcel_icon} alt="" />
-                                <p onClick={() => onOrderIdClickHandler(order)} className='order-id'>{order.order_id}</p>
-                                <p>{order.order_date.replace('T', ' ').replace('.000Z', '')}</p>
-                                <p>{order.status}</p>
-                            </div>
-                        )
-                    }
+                {filteredOrders.map((order, index) => {
+                    return (
+                        <div key={index} className='titles orders-order'>
+                            <img src={assets.parcel_icon} alt="" />
+                            <p onClick={() => onOrderIdClickHandler(order)} className='order-id'>{order.order_id}</p>
+                            <p>{order.order_date.replace('T', ' ').replace('.000Z', '')}</p>
+                            <p>{order.status}</p>
+                        </div>
+                    )
                 })}
             </div>
             {showOrderDetailsPopup && currentOrder && (
