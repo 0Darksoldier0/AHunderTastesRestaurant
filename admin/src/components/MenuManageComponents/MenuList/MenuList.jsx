@@ -4,7 +4,7 @@ import axios from 'axios'
 import { BACKEND_URL } from '../../../config/constants'
 import { toast } from 'react-toastify'
 import { NavLink } from 'react-router-dom'
-import EditPopup from '../../EditPopUp/EditPopUp'
+import EditPopup from '../../EditPopup/EditPopup'
 import { StoreContext } from '../../../context/StoreContext'
 
 const MenuList = () => {
@@ -49,7 +49,7 @@ const MenuList = () => {
         setShowEditPopup(true);
     };
 
-    const handleClosePopup = () => {
+    const closePopupHandler = () => {
         setShowEditPopup(false);
         setCurrentProduct(null);
     };
@@ -158,7 +158,7 @@ const MenuList = () => {
             {showEditPopup && currentProduct && (
                 <EditPopup
                     product={currentProduct}
-                    onClose={handleClosePopup}
+                    onClose={closePopupHandler}
                     onUpdateSuccess={onUpdateSuccessHandler}
                 />
             )}

@@ -73,7 +73,7 @@ const userSignUp = async (req, res) => {
 
 const getUserData = async (req, res) => {
     const { username } = req.user;
-    const select_query = "SELECT first_name, last_name FROM users WHERE username = ?";
+    const select_query = "SELECT username, first_name, last_name FROM users WHERE username = ?";
 
     try {
         const [results] = await database.promise().query(select_query, [username]);

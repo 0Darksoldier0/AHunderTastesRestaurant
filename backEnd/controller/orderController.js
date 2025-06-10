@@ -20,7 +20,7 @@ const placeOrder = async (req, res) => {
         const order_id = String(Math.floor(performance.now()) + Date.now());
         await database.promise().query(insert_orders_query, [order_id, username, shipping_details]);
 
-        cartItems.forEach( async (item) => {
+        cartItems.forEach(async (item) => {
             await database.promise().query(insert_order_details_query, [order_id, item.product_id, item.quantity]);
         })
         await database.promise().query(update_cart_query, [username]);
@@ -55,27 +55,64 @@ const placeOrder = async (req, res) => {
             cancel_url: `${FRONTEND_URL}/verifyOrder?success=false&order_id=${order_id}`
         })
         console.log("session.url: " + session.url);
-        res.json({success: true, session_url: session.url });
+        res.json({ success: true, session_url: session.url });
     }
     catch (error) {
         console.error("(PlaceOrder) Error placing order: ", error);
-        res.json({sucess: false, message: "Error placing order" });
+        res.json({ sucess: false, message: "Error placing order" });
     }
 }
 
 const verifyOrder = async (req, res) => {
-    const {order_id, success} = req.body;
+    const { order_id, success } = req.body;
     const update_query = "UPDATE online_orders SET payment = ? WHERE order_id = ?";
     try {
         if (success == "true") {
             await database.promise().query(update_query, [1, order_id]);
-            res.json({success: true, message: "Paid"})
+            res.json({ success: true, message: "Paid" })
         }
     }
     catch (error) {
         console.error("(VerifyOrder) Error verifying order: ", error);
-        return res.json({success: false, message: "Error verifying order"});
+        return res.json({ success: false, message: "Error verifying order" });
     }
 }
 
-export { placeOrder, verifyOrder }
+const getUserOrders = async (req, res) => {
+    const { username } = req.user;
+    const select_query = `SELECT o.order_id, o.order_date, o.shipping_details, sum((p.price * od.product_quantity))  as subtotal, o.status
+                            FROM online_orders o 
+                            JOIN online_order_details od ON o.order_id = od.order_id 
+                            JOIN products p ON od.product_id = p.product_id
+                            WHERE o.username = 'admin' and payment is true
+                            GROUP BY o.order_id, o.username, o.order_date
+                            ORDER BY o.order_id desc`;
+
+    try {
+        const [results] = await database.promise().query(select_query, [username]);
+        return res.status(200).json({ userOrders: results });
+    }
+    catch (error) {
+        console.error("(GetUserOrders) Error fetching user orders: ", error);
+        return res.status(500).json({ message: "Error fetching user orders" });
+    }
+}
+
+const getOrderDetails = async (req, res) => {
+    const { order_id } = req.body;
+    const select_query =   `SELECT od.order_id, od.product_id, p.product_name, p.price, od.product_quantity, (p.price * od.product_quantity) as total 
+                            FROM online_order_details od
+                            JOIN products p ON od.product_id = p.product_id
+                            WHERE od.order_id = ?` ;
+                            
+    try {
+        const [results] = await database.promise().query(select_query, [order_id]);
+        return res.status(200).json({orderDetails: results});
+    }       
+    catch (error) {
+        console.error("(GetOrderDetails) Error fetching user details");
+        return res.status(500).json({message: "Error fetching user details"})
+    }
+}
+
+export { placeOrder, verifyOrder, getUserOrders, getOrderDetails }

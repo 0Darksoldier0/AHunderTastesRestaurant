@@ -18,6 +18,7 @@ import { StoreContext } from './context/StoreContext'
 import Account from './pages/Account/Account'
 // import ProtectedAndCheckCartAmountRoute from './components/ProtectedAndCheckCartRoute/ProtectedAndCheckCartAmountRoute'
 import VerifyOrder from './pages/VerifyOrder/VerifyOrder'
+import Orders from './pages/Orders/Orders'
 
 const App = () => {
 
@@ -33,9 +34,13 @@ const App = () => {
                 <Route path='/aboutUs' element={<AboutUs />} />
                 <Route path='/menu' element={<Menu />} />
                 <Route path='/cart' element={<Cart />} />
+                
                 <Route path='/signIn' element={<SignIn setMenu={setMenu} />} />
                 <Route path='/signUp' element={<SignUp />} />
+
+                <Route path='/orders' element={<Orders />} />
                 <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
+
                 <Route path='/placeOrder' element={<ProtectedRoute><PlaceOrder /></ProtectedRoute>} />
                 <Route path='/verifyOrder' element={<ProtectedRoute><VerifyOrder /></ProtectedRoute>} />
                 

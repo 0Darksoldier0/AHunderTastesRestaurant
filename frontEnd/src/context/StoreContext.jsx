@@ -17,6 +17,7 @@ const StoreContextProvider = (props) => {
     const [token, setToken] = useState("");
     const [food_list, setFoodList] = useState([]);
     const [userData, setUserData] = useState({});
+    const [orderData, setOrderData] = useState([]);
 
 
     const fetchFoodList = async () => {
@@ -48,7 +49,6 @@ const StoreContextProvider = (props) => {
                 console.error("(LoadCartData-StoreContext) Server error")
             }
         }
-        
     }
 
     const addToCart = async (product_id) => {
@@ -117,6 +117,22 @@ const StoreContextProvider = (props) => {
         
     }
 
+    const fetchUserOrders = async (token) => {
+            try {
+                const response = await axios.post(`${BACKEND_URL}/api/order/getUserOrders`, {}, {headers: {token}});
+                setOrderData(response.data.userOrders);
+                console.log(response.data.userOrders);
+            }
+            catch (error) {
+                if (error.response) {
+                    toast.error(error.response.data.message);
+                }
+                else {
+                    toast.error("Server error, please try again later");
+                }
+            }
+        }
+
     useEffect(() => {
         async function loadData() {
             await fetchFoodList();
@@ -124,6 +140,7 @@ const StoreContextProvider = (props) => {
                 setToken(localStorage.getItem("token"));
                 await loadCartData(localStorage.getItem("token"));
                 await fetchUserData(localStorage.getItem("token"));
+                await fetchUserOrders(localStorage.getItem("token"));
             }
         }
         loadData();
@@ -157,20 +174,25 @@ const StoreContextProvider = (props) => {
     }, [location.pathname]);
 
     const contextValue = {
+        token,
+        setToken,
+
         menu,
         setMenu,
+
         food_list,
         cartItems,
         setCartItems,
         addToCart,
         removeFromCart,
         getCartTotalAmount,
-        token,
-        setToken,
         loadCartData,
+
         userData,
         setUserData,
-        fetchUserData
+        fetchUserData,
+
+        orderData
     }
 
     return (

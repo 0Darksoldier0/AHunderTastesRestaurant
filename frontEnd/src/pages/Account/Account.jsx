@@ -111,9 +111,6 @@ const Account = () => {
 
     }
 
-    useEffect(() => {
-        fetchUserData(token);
-    }, [])
 
     return (
         <div className='account-container'>
@@ -122,7 +119,7 @@ const Account = () => {
                 <div className='groups'>
                     <h3>Username</h3>
                     <div className='sub-group'>
-                        <p className='p'>account name</p>
+                        <p className='p'>{userData.username}</p>
                     </div>
 
                 </div>

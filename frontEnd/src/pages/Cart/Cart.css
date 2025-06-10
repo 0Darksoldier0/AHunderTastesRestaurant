@@ -2,6 +2,7 @@
     padding-top: 150px;
     padding-left: 5%;
     padding-right: 5%;   
+    animation: fadeIn 1s;
 }
 
 .cart-items {
