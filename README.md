@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/50ef8dc6-cfe3-4906-956b-9c7393a872e1)// Setup Database
+// Setup Database
 Ensure you have MYSQL install, if not, follow this tutorial: https://www.youtube.com/watch?v=hiS_mWZmmI0
 
 NOTE: DO REMEMBER YOUR 'USERNAME' AND 'PASSWORD'
