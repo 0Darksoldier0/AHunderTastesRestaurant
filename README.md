@@ -1,4 +1,4 @@
-// Setup Database
+*DATABASE SETUP
 Ensure you have MYSQL install, if not, follow this tutorial: https://www.youtube.com/watch?v=hiS_mWZmmI0
 
 NOTE: DO REMEMBER YOUR 'USERNAME' AND 'PASSWORD'
@@ -16,7 +16,7 @@ Select EVERYTHING with ctl+A run
 
 Now the database should be properly configured
 
-// How to run the app
+*RUNNING THE APP
 Download all 3 folders: backend, frontend and admin. Have them the same folder for convenience. Open this big folder in vscode
 
 Under backend folder, open '.env' file
