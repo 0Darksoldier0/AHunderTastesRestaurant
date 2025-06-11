@@ -16,7 +16,7 @@ Paste it inside the query tab in your recently opened connection
 
 ![image](https://github.com/user-attachments/assets/a873a9eb-5fab-4ad4-8636-fca5f1c9502d)
 
-Select EVERYTHING with ctl+A run
+Select EVERYTHING with ctl+A and execute the script
 
 ![image](https://github.com/user-attachments/assets/9fe877a3-ab4d-415e-a040-1503a9efff75)
 
