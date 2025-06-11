@@ -63,7 +63,7 @@ const OnlineOrdersManagement = () => {
     return (
         <div className='orders'>
             <h1>All Orders</h1>
-            <h2>Waiting to be delivered</h2>
+            <h2>New Orders</h2>
             <div className='titles'>
                 <p></p>
                 <p>OrderID</p>
