@@ -54,6 +54,9 @@ NOTE: frontend HAVE TO run on localhost:5173
 ![image](https://github.com/user-attachments/assets/62f0de6b-ec00-4bba-8bcd-5eb564d77ffd)
 ![image](https://github.com/user-attachments/assets/0d18cbe5-3418-4cd8-9d0c-9e459dfd5a9e)
 
+ADMIN PAGE CAN ONLY BE SIGNED IN WITH THIS:
+username: admin
+password: 123456789
 
 
 
