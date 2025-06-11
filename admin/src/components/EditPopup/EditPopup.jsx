@@ -78,8 +78,8 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
     };
 
     return (
-        <div className="edit-popup-container">
-            <div className="edit-popup">
+        <div className="edit-popup-container" onClick={onClose}>
+            <div className="edit-popup" onClick={e => e.stopPropagation()}>
                 <h1>Edit Product</h1>
                 <form onSubmit={onSubmitHandler}>
                     <div className="form-group">

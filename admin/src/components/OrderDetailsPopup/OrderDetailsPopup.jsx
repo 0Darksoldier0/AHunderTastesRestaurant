@@ -20,8 +20,8 @@ const OrderDetailsPopup = ({ order, token, onClose }) => {
         // console.log(orderDetails);
     }, [])
     return (
-        <div className='order-details-container'>
-            <div className="order-details-content">
+        <div className='order-details-container' onClick={onClose}>
+            <div className="order-details-content" onClick={e => e.stopPropagation()}>
                 <p className="close-button" onClick={onClose}>&times;</p>
                 <h1>Order Details</h1>
                 <div className="order-details-sections">

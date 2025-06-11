@@ -10,12 +10,12 @@ const authenticateToken = (req, res, next) => {
 
     try {
         const response = jwt.verify(token, process.env.ACCESS_TOKEN);
-        // Attach user info to req.user (or req.auth)
-        req.user = { // THIS IS THE CHANGE
+        
+        req.user = { 
             username: response.username,
             type: response.type
         };
-        console.log("Token successfully verified. User:", req.user.username, "Type:", req.user.type);
+        // console.log("Token successfully verified. User:", req.user.username, "Type:", req.user.type);
         next();
     }
     catch (error) {

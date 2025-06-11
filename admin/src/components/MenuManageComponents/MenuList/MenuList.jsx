@@ -5,13 +5,16 @@ import { BACKEND_URL } from '../../../config/constants'
 import { toast } from 'react-toastify'
 import { NavLink } from 'react-router-dom'
 import EditPopup from '../../EditPopup/EditPopup'
+import ConfirmPopup from '../../ConfirmPopup/ConfirmPopup'
 import { StoreContext } from '../../../context/StoreContext'
 
 const MenuList = () => {
     const { foodList, fetchFoodList, token } = useContext(StoreContext);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
-    
+
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
     // State to track the specific product being edited and its new image file
     const [editingImage, setEditingImage] = useState({ productId: null, file: null });
 
@@ -32,7 +35,7 @@ const MenuList = () => {
             if (response.status === 200) {
                 toast.success(response.data.message);
             }
-        } 
+        }
         catch (error) {
             if (error.response) {
                 toast.error(error.response.data.message);
@@ -40,7 +43,6 @@ const MenuList = () => {
             else {
                 toast.error("Server error, please try again later");
             }
-            
         }
     }
 
@@ -49,10 +51,20 @@ const MenuList = () => {
         setShowEditPopup(true);
     };
 
-    const closePopupHandler = () => {
+    const closeEditPopupHandler = () => {
         setShowEditPopup(false);
         setCurrentProduct(null);
     };
+
+    const onClickRemoveHandler = (product) => {
+        setCurrentProduct({ ...product });
+        setShowConfirmPopup(true);
+    }
+
+    const closeConfirmPopupHandler = () => {
+        setShowConfirmPopup(false);
+        setCurrentProduct(null);
+    }
 
     const onUpdateSuccessHandler = async () => {
         await fetchFoodList(token);
@@ -63,7 +75,7 @@ const MenuList = () => {
             setEditingImage({ productId: productId, file: event.target.files[0] });
         }
     };
-    
+
     const onSaveImageClickHandler = async (item) => {
         if (!editingImage.file) {
             toast.error("Please select an image to save.");
@@ -77,19 +89,20 @@ const MenuList = () => {
 
         try {
             const response = await axios.post(`${BACKEND_URL}/api/product/updateimage`, formData, { headers: { token } });
+
             if (response.status === 200) {
                 toast.success(response.data.message);
-                await fetchFoodList(token); // Pass the token to refresh the list
-                setEditingImage({ productId: null, file: null }); // Reset state
-            } 
-        } 
+                await fetchFoodList(token);
+                setEditingImage({ productId: null, file: null });
+            }
+        }
         catch (error) {
             if (error.response.data.message) {
                 toast.error(error.response.data.message);
             }
             else {
                 toast.error("Server error, please try again later");
-            }          
+            }
         }
     }
 
@@ -118,20 +131,20 @@ const MenuList = () => {
                     return (
                         <div className='list-table-format' key={index}>
                             <div>
-                                <img 
-                                    className='image-preview' 
-                                    src={isEditingThisItem && editingImage.file ? URL.createObjectURL(editingImage.file) : `${BACKEND_URL}/images/` + item.image} 
-                                    alt="Product" 
+                                <img
+                                    className='image-preview'
+                                    src={isEditingThisItem && editingImage.file ? URL.createObjectURL(editingImage.file) : `${BACKEND_URL}/images/` + item.image}
+                                    alt="Product"
                                 />
                                 <div className={`image-change ${isEditingThisItem ? 'editing' : ''}`}>
                                     {!isEditingThisItem ? (
                                         <>
                                             <label className='change-cancel' htmlFor={`image-upload-${item.product_id}`}>Change</label>
-                                            <input 
-                                                onChange={(e) => handleImageChange(e, item.product_id)} 
-                                                type="file" 
-                                                id={`image-upload-${item.product_id}`} 
-                                                hidden 
+                                            <input
+                                                onChange={(e) => handleImageChange(e, item.product_id)}
+                                                type="file"
+                                                id={`image-upload-${item.product_id}`}
+                                                hidden
                                             />
                                         </>
                                     ) : (
@@ -149,7 +162,7 @@ const MenuList = () => {
                             <p>{item.availability ? 'Available' : 'Unavailable'}</p>
                             <div className='actions'>
                                 <p onClick={() => onClickEditHandler(item)}>edit</p>
-                                <p onClick={() => removeProduct(item.product_id)}>remove</p>
+                                <p onClick={() => onClickRemoveHandler(item)}>remove</p>
                             </div>
                         </div>
                     )
@@ -158,8 +171,16 @@ const MenuList = () => {
             {showEditPopup && currentProduct && (
                 <EditPopup
                     product={currentProduct}
-                    onClose={closePopupHandler}
+                    onClose={closeEditPopupHandler}
                     onUpdateSuccess={onUpdateSuccessHandler}
+                />
+            )}
+            
+            {showConfirmPopup && currentProduct && (
+                <ConfirmPopup
+                    product={currentProduct}
+                    onConfirm={removeProduct}
+                    onClose={closeConfirmPopupHandler}
                 />
             )}
         </div>

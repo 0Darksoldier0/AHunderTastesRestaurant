@@ -3,6 +3,7 @@ import {addProduct, removeProduct, listProducts, listAvailableProducts, updatePr
 import multer from 'multer'
 import { authenticateToken } from '../middleware/authentication.js'
 import {checkAccountType} from  '../middleware/checkAccountType.js'
+import { checkMaintenanceMode } from '../middleware/checkMaintenanceMode.js'
 
 const productRouter = express.Router();
 
@@ -16,13 +17,12 @@ const storage = multer .diskStorage({
 
 const upload = multer({storage:storage})
 
-productRouter.post("/add", authenticateToken, checkAccountType, upload.single("image"), addProduct) 
+productRouter.post("/add", authenticateToken, checkAccountType, checkMaintenanceMode, upload.single("image"), addProduct) 
+productRouter.post("/remove", authenticateToken, checkAccountType, checkMaintenanceMode, removeProduct)
+productRouter.post("/update", authenticateToken, checkAccountType, checkMaintenanceMode, updateProduct)
+productRouter.post("/updateimage", authenticateToken, checkAccountType, checkMaintenanceMode, upload.single("image"), updateProductImage)
+productRouter.post("/getprice", authenticateToken, checkAccountType, getProductPrice)
 productRouter.post("/listall", authenticateToken, checkAccountType, listProducts)
 productRouter.get("/listavailable", listAvailableProducts)
-productRouter.post("/remove", authenticateToken, checkAccountType, removeProduct)
-productRouter.post("/update", authenticateToken, checkAccountType, updateProduct)
-productRouter.post("/updateimage", authenticateToken, checkAccountType, upload.single("image"), updateProductImage)
-productRouter.post("/getprice", authenticateToken, checkAccountType, getProductPrice)
-
 
 export default productRouter;

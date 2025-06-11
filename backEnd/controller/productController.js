@@ -71,29 +71,74 @@ const listAvailableProducts = async (req, res) => {
 
 // delete a product
 const removeProduct = async (req, res) => {
+    const {product_id} = req.body;
+
     const select_query = "SELECT * FROM products WHERE product_id = ?";
     const delete_query = "DELETE FROM products WHERE product_id = ?";
 
+    const set_safe_update_query = "SET SQL_SAFE_UPDATES = ?"
+    const update_cart_query = `UPDATE users SET cart = JSON_REMOVE(cart, '$."${product_id}"');`
+
+    let connection;
     try {
-        const [results] = await database.promise().query(select_query, [req.body.product_id]);
+        // This is risky operation. Transaction is used
+        connection = await database.promise().getConnection();
+        await connection.beginTransaction();
+
+        const [results] = await connection.query(select_query, [product_id]);
         if (results.length <= 0) {
             console.log("(RemoveProduct) Product not found: ");
+            
+            await connection.rollback();
+            if (connection) {
+                connection.release();
+            }
+            
             return res.status(404).json({ message: "Product not found" });
         }
         else {
-            await database.promise().query(delete_query, [req.body.product_id]);
+            // Remove the selected product
+            await connection.query(delete_query, [product_id]);
+
+            // Also remove product from all users cart
+            await connection.query(set_safe_update_query, [0]);
+            await connection.query(update_cart_query);
+            await connection.commit();
+            
             fs.unlink(`uploads/${results[0].image}`, (err) => {
                 if (err) {
                     console.error("(RemoveProduct) Fail to unlink product image");
                 }
             });
+
             return res.status(200).json({ message: "Product removed" });
         }
-
     }
     catch (error) {
         console.error("(RemoveProduct) Error removing product: ", error);
-        return res.status(500).json({ message: "Error removing product" });
+
+        if (connection) {
+            try {
+                await connection.rollback();
+                console.log("(RemoveProduct) Error removing product, rolling back")
+            }
+            catch (rollbackError) {
+                console.error("(RemoveProduct) Transaction rollback error: ", rollbackError)
+            }
+        }
+
+        return res.status(500).json({ message: "Product removal not allowed, please change status to 'unavailable'" });
+    }
+    finally {
+        if (connection) {
+            try {
+                await connection.query(set_safe_update_query, [1]);
+            }
+            catch (safeUpdateError) {
+                console.error("(RemoveProduct) Error re-enabling safe update: ", safeUpdateError)
+            }
+            connection.release();
+        }
     }
 }
 
@@ -101,13 +146,52 @@ const removeProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     const { product_name, price, description, category_id, availability, product_id } = req.body;
     const update_query = "UPDATE products SET product_name = ?, price = ?, description = ?, category_id = ?, availability = ? WHERE product_id = ?";
+    
+    const set_safe_update_query = "SET SQL_SAFE_UPDATES = ?"
+    const update_cart_query = `UPDATE users SET cart = JSON_REMOVE(cart, '$."${product_id}"');`
+    
+    let connection;
+
     try {
-        await database.promise().query(update_query, [product_name, price, description, category_id, availability, product_id]);
+        // This is risky operation. Transaction is used
+        connection = await database.promise().getConnection();
+        await connection.beginTransaction();
+
+        await connection.query(update_query, [product_name, price, description, category_id, availability, product_id]);
+        
+        // Also remove product from all users cart if availabity is set to 0
+        if (availability === 0) {
+            await connection.query(set_safe_update_query, [0]);
+            await database.promise().query(update_cart_query);
+        }
+
+        await database.promise().commit();
         return res.status(200).json({ message: "Product updated" });
     }
     catch (error) {
         console.error("(UpdateProduct) Error updating product: ", error);
+
+        if (connection) {
+            try {
+                await connection.rollback();
+                console.log("(UpdateProduct) Error updating product, rolling back");
+            }
+            catch (rollbackError) {
+                console.error("(UpdateProduct) Transaction rollback error: ", rollbackError);
+            }
+        }
+
         return res.status(500).json({ message: "Error updating product" });
+    }
+    finally {
+        if (connection) {
+            try {
+                await connection.query(set_safe_update_query, [1]);
+            } catch (safeUpdateError) {
+                console.error("(UpdateProduct) Error re-enabling safe update: ", safeUpdateError);
+            }
+            connection.release();
+        }
     }
 }
 
@@ -117,10 +201,8 @@ const updateProductImage = async (req, res) => {
     const update_query = "UPDATE products SET image = ? WHERE product_id = ?";
 
     try {
-        // Update the database first.
         await database.promise().query(update_query, [new_image_filename, product_id]);
 
-        // if update succeeds, delete the old image.
         fs.unlink(`./uploads/${old_image_filename}`, err => {
             if (err) {
                 console.error("Fail to unlink uploaded file: ", err)
@@ -130,7 +212,7 @@ const updateProductImage = async (req, res) => {
         return res.status(200).json({ image: new_image_filename, message: "Product image updated" });
 
     } catch (error) {
-        // If the database update failed, we need to clean up the newly uploaded image.
+        // If the database update failed, clean up the newly uploaded image.
         fs.unlink(`./uploads/${new_image_filename}`, err => {
             if (err) {
                 console.error("Fail to unlink uploaded file: ", err)
