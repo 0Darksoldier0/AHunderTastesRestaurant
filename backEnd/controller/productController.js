@@ -162,10 +162,10 @@ const updateProduct = async (req, res) => {
         // Also remove product from all users cart if availabity is set to 0
         if (availability === 0) {
             await connection.query(set_safe_update_query, [0]);
-            await database.promise().query(update_cart_query);
+            await connection.query(update_cart_query);
         }
 
-        await database.promise().commit();
+        await connection.commit();
         return res.status(200).json({ message: "Product updated" });
     }
     catch (error) {

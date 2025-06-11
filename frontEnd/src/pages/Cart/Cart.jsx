@@ -10,12 +10,22 @@ import { BACKEND_URL } from '../../../config/constants';
 const Cart = () => {
 
     const token = localStorage.getItem('token');
-    const { food_list, cartItems, addToCart, removeFromCart, getCartTotalAmount} = useContext(StoreContext);
+    const { food_list, cartItems, addToCart, removeFromCart, getCartTotalAmount, loadCartData, fetchFoodList} = useContext(StoreContext);
     const deliveryFee = 35000;
     const navigate = useNavigate();
 
-    const processToCheckOutHandler = () => {
+    const processToCheckOutHandler = async () => {
         if (getCartTotalAmount() > 0) {
+            const currentCartItemsSnapshot = JSON.parse(JSON.stringify(cartItems));
+
+            const updatedCartData = await loadCartData(token);
+            await fetchFoodList();
+
+            const areCartsEqual = JSON.stringify(currentCartItemsSnapshot) === JSON.stringify(updatedCartData);
+            if (!areCartsEqual) {
+                toast.error("Some items have became unavailable")
+                return;
+            }
             navigate('/placeOrder');
         }
         else {
