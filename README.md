@@ -12,7 +12,7 @@ Open the provided .sql file, and copy EVERYTHING;
 
 ![image](https://github.com/user-attachments/assets/b5231f16-70e1-4a34-850f-0504862749f7)
 
-Paste it inside the query tab in your recently open connection
+Paste it inside the query tab in your recently opened connection
 
 ![image](https://github.com/user-attachments/assets/a873a9eb-5fab-4ad4-8636-fca5f1c9502d)
 
