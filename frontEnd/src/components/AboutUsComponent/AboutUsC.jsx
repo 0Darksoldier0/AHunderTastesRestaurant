@@ -2,6 +2,7 @@ import React from 'react'
 import './AboutUsC.css'
 import aboutUs1 from '../../assets/aboutUs1.png'
 import aboutUs2 from '../../assets/aboutUs2.png'
+import {assets} from '../../assets/assets'
 
 const AboutUsC = () => {
     return (
@@ -18,21 +19,21 @@ const AboutUsC = () => {
 
             <div className="aboutus-middle">
                 <div className='middle-subsection'>
-                    <img src="" alt="icon" />
+                    <img src={assets.multi_cuisine} alt="icon" />
                     <div className='right-section'>
                         <h3>Multi Cuisine</h3>
                         <p>In the new era of technology we look in the future with certainty life</p>
                     </div>
                 </div>
                 <div className='middle-subsection'>
-                    <img src="" alt="icon" />
+                    <img src={assets.easy_order} alt="icon" />
                     <div className='right-section'>
                         <h3>Easy To Order</h3>
                         <p>In the new era of technology we look in the future with certainty life</p>
                     </div>
                 </div>
                 <div className='middle-subsection'>
-                    <img src="" alt="icon" />
+                    <img src={assets.fast_delivery} alt="icon" />
                     <div className='right-section'>
                         <h3>Fast Delivery</h3>
                         <p>In the new era of technology we look in the future with certainty life</p>

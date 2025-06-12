@@ -18,7 +18,7 @@
     padding-top: 80px;
     padding-bottom: 50px;
     color: white;
-    gap: 100px;
+    gap: 150px;
 }
 
 .footer-left {
@@ -26,6 +26,8 @@
 }
 
 .footer-left .logo {
+    display: flex;
+    align-items: center;
     margin-bottom: 30px;
 }
 
@@ -47,10 +49,14 @@
 }
 
 .footer-left img {
-    width: 20px;
-    margin-right: 20px;
+    width: 30px;
+    margin-right: 12px;
 }
-
+.footer-middle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 .footer-middle h2 {
     font-weight: 500;
     font-size: 30px;
@@ -58,8 +64,17 @@
 }
 
 .footer-middle img {
-    width: 30px;
     margin-right: 10px;
+}
+.footer-middle .phone-logo {
+    width: 15px;
+}
+.footer-middle .mail-logo {
+    width: 18px;
+    margin-left: -2px;
+}
+.footer-middle .location-logo {
+    width: 15px;
 }
 
 .footer-middle p {

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './Account.css'
-import { NavLink } from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
 import { BACKEND_URL } from '../../../config/constants'
 import axios from 'axios'
@@ -30,17 +29,23 @@ const Account = () => {
         if (name === "first_name") {
             setFirstnameData(prevData => ({ ...prevData, [name]: value }));
         }
-        if (name === "last_name") {
+        else if (name === "last_name") {
             setLastnameData(prevData => ({ ...prevData, [name]: value }));
         }
-        if (name === "old_password" || name === "new_password" || name === "retype_new_password") {
+        else if (name === "old_password" || name === "new_password" || name === "retype_new_password") {
             const cleanedValue = value.replace(/\s/g, '');
             setPasswordData(prevData => ({ ...prevData, [name]: cleanedValue }));
         }
     }
 
+
     const onFirstnameSaveClickHandler = async (event) => {
         event.preventDefault();
+
+        if (firstnameData.first_name.trim() === "") {
+            toast.error("Please enter valid data")
+            return;
+        }
 
         try {
             const response = await axios.post(`${BACKEND_URL}/api/user/updatefirstname`, firstnameData, { headers: { token } });
@@ -64,6 +69,11 @@ const Account = () => {
 
     const onLastnameSaveClickHandler = async (event) => {
         event.preventDefault();
+
+        if (lastnameData.last_name.trim() === "") {
+            toast.error("Please enter valid data")
+            return;
+        }
 
         try {
             const response = await axios.post(`${BACKEND_URL}/api/user/updatelastname`, lastnameData, { headers: { token } });
@@ -108,7 +118,6 @@ const Account = () => {
             }
 
         }
-
     }
 
 

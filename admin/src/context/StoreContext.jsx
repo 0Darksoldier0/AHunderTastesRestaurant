@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { BACKEND_URL } from "../../config/constants";
-import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 
 export const StoreContext = createContext(null);
@@ -18,6 +17,7 @@ const StoreContextProvider = (props) => {
     const [token, setToken] = useState("");
     const [foodList, setFoodList] = useState([]);
     const [ordersData, setOrdersData] = useState([]);
+    const [staffList, setStaffList] = useState([]);
     
     // Data visulization
     const [priceData, setPriceData] = useState([]);
@@ -59,12 +59,30 @@ const StoreContextProvider = (props) => {
         }
     }
 
+    const fetchUsers = async (token) => {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/user/list`, {}, {headers: { token }});
+            if (response.status === 200) {
+                setStaffList(response.data.users);
+                // console.log(response.data.users);
+            }
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(FetchUsers) " + error.response.data.message);
+            }
+            else {
+                console.error("(FetchUsers) Server error");
+            }
+        }
+    }
+
     const fetchProductPrice = async (token) => {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/product/getprice`, {}, {headers: {token}})
             if (response.status === 200) {
                 setPriceData(response.data.data);
-                console.log(response.data.data);
+                // console.log(response.data.data);
             }
         }
         catch (error) {
@@ -84,6 +102,7 @@ const StoreContextProvider = (props) => {
                 await fetchFoodList(localStorage.getItem("token"));
                 await fetchOrders(localStorage.getItem("token"))
                 await fetchProductPrice(localStorage.getItem("token"))
+                await fetchUsers(localStorage.getItem("token"));
             }
         }
         loadData();
@@ -109,6 +128,9 @@ const StoreContextProvider = (props) => {
         else if (path === '/onlineOrdersManagement') {
             newMenu = "Manage Online Orders";
         }
+        else if (path === '/staffManagement') {
+            newMenu = "Manage Staff"
+        }
         else {
             newMenu = "";
         }
@@ -129,7 +151,10 @@ const StoreContextProvider = (props) => {
         fetchOrders,
 
         priceData,
-        fetchProductPrice
+        fetchProductPrice,
+
+        staffList,
+        fetchUsers
     }
 
     return (

@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
-import './SignUp.css'
-import { NavLink, useNavigate } from 'react-router-dom'
+import './AddStaff.css'
+import { Link, useNavigate } from 'react-router-dom'
 import { BACKEND_URL } from '../../../config/constants'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { StoreContext } from '../../context/StoreContext'
 
-const SignUp = () => {
 
+const AddStaff = () => {
     const { token } = useContext(StoreContext);
 
     const navigate = useNavigate();
@@ -43,7 +43,7 @@ const SignUp = () => {
         event.preventDefault();
 
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/user/signUp`, data);
+            const response = await axios.post(`${BACKEND_URL}/api/user/staffSignUp`, data);
 
             if (response.status === 200) {
                 setData({
@@ -69,12 +69,6 @@ const SignUp = () => {
 
     }
 
-    useEffect(() => {
-        if (token) {
-            navigate('/')
-        }
-    }, [token])
-
     // useEffect(() => {
     //     console.log(data)
     // }, [data])
@@ -82,7 +76,7 @@ const SignUp = () => {
     return (
         <div className='signup-container'>
             <form className='signup' onSubmit={onSignUp}>
-                <h1>Sign Up</h1>
+                <h1>Create Account</h1>
                 <div className='multi-field-group'>
                     <div className="field-group">
                         <p>First Name</p>
@@ -99,8 +93,8 @@ const SignUp = () => {
                     <input name='username' onChange={onChangeHandler} value={data.username} type="text" required />
                 </div>
                 <div className="field-group">
-                    <p>Phone number &#40;*not required&#41;</p>
-                    <input name='phone_number' onChange={onChangeHandler} value={data.phone_number} type="text" />
+                    <p>Phone number</p>
+                    <input name='phone_number' onChange={onChangeHandler} value={data.phone_number} type="text" required/>
                 </div >
                 <div className='multi-field-group'>
                     <div className="field-group">
@@ -114,14 +108,12 @@ const SignUp = () => {
                 </div>
 
                 <div className="signup-buttons">
-                    <button className='signup-btn btns' type='submit'>Sign Up</button>
-                    <NavLink to={'/'}><button className='cancel-btn btns' type='button'>Cancel</button></NavLink>
+                    <button className='signup-btn btns' type='submit'>Create Account</button>
+                    <Link to={'/staffManagement'}><button className='cancel-btn btns' type='button'>Cancel</button></Link>
                 </div>
-                <NavLink to='/signIn'><p className='have-account'>Already have an account?</p></NavLink>
             </form>
         </div>
     )
 }
 
-
-export default SignUp
+export default AddStaff

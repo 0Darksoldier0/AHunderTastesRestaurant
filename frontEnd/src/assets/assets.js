@@ -60,6 +60,21 @@ import bag_icon from './bag_icon.png'
 import logout_icon from './logout_icon.png'
 import parcel_icon from './parcel_icon.png'
 
+import restaurant_logo from './japanese-food-logo.png'
+import breakfast_icon from './breakfast_icon.png'
+import dessert_icon from './dessert_icon.png'
+import drink_icon from './drink_icon.png'
+import maindish_icon from './maindish_icon.png'
+import multi_cuisine from './multi_cuisine.png'
+import easy_order from './easy_order.png'
+import fast_delivery from './fast_delivery.png'
+import facebook_icon1 from './facebook_icon1.png'
+import instagram_icon1 from './instagram_icon1.png'
+import twitter_icon1 from './twitter_icon1.png'
+import location_logo from './location.png'
+import mail_logo from './mail.png'
+import phone_logo from './phone.png'
+
 export const assets = {
     logo,
     basket_icon,
@@ -79,7 +94,21 @@ export const assets = {
     profile_icon,
     logout_icon,
     bag_icon,
-    parcel_icon
+    parcel_icon,
+    breakfast_icon,
+    dessert_icon,
+    drink_icon,
+    maindish_icon,
+    multi_cuisine,
+    easy_order,
+    fast_delivery,
+    facebook_icon1,
+    instagram_icon1,
+    twitter_icon1,
+    phone_logo,
+    mail_logo,
+    location_logo,
+    restaurant_logo
 }
 
 export const menu_list = [

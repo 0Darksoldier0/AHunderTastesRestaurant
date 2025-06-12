@@ -31,7 +31,7 @@ const Navbar = () => {
     return (
         <div className='navbar'>
             <Link to='/'><div className='logo'>
-                <img src="" alt="logo" />
+                <img src={assets.restaurant_logo} alt="logo" />
                 <p>A Hundred Tastes</p>
             </div></Link>
             <ul className='navbar-menu'>

@@ -4,6 +4,7 @@ import footer1 from '../../assets/footer1.png'
 import footer2 from '../../assets/footer2.png'
 import footer3 from '../../assets/footer3.png'
 import footer4 from '../../assets/footer4.png'
+import { assets } from '../../assets/assets'
 
 const Footer = () => {
     return (
@@ -12,26 +13,32 @@ const Footer = () => {
 
                 <div className='footer-left'>
                     <div className='logo'>
-                        <img src="" alt="hundredtaste logo" />
+                        <img src={assets.restaurant_logo} alt="hundredtaste logo" />
                         <h2>A Hundred Tastes</h2>
                     </div>
                     <p>In the new era of technology we look in the future with certainty and pride to our company</p>
-                    <img src="" alt="facebook-logo" />
-                    <img src="" alt="instagram logo" />
-                    <img src="" alt="twitter logo" />
-                    <img src="" alt="tiktok logo" />
+                    <div>
+                        <img src={assets.facebook_icon1} alt="facebook-logo" />
+                        <img src={assets.instagram_icon1} alt="instagram logo" />
+                        <img src={assets.twitter_icon1} alt="twitter logo" />
+                    </div>
+
                 </div>
 
                 <div className="footer-middle">
                     <h2>Contact</h2>
-                    <img src="" alt="phone logo" />
-                    <p>0123-456-789</p>
-                    <br />
-                    <img src="" alt="email logo" />
-                    <p>ahundredtastes@gmail.com</p>
-                    <br />
-                    <img src="" alt="address logo" />
-                    <p>hundred taste address</p>
+                    <div>
+                        <img className='phone-logo' src={assets.phone_logo} alt="phone logo" />
+                        <p>0123-456-789</p>
+                    </div>
+                    <div>
+                        <img className='mail-logo' src={assets.mail_logo} alt="email logo" />
+                        <p>ahundredtastes@gmail.com</p>
+                    </div>
+                    <div>
+                        <img className='location-logo' src={assets.location_logo} alt="address logo" />
+                        <p>hundred taste address</p>
+                    </div>
                 </div>
 
                 <div className="footer-right">
@@ -45,7 +52,6 @@ const Footer = () => {
             </div>
             <p className='copyright'>Copyright &copy; 2023 Hastag Developer. All Rights Reserved</p>
         </div>
-
     )
 }
 

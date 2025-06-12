@@ -1,12 +1,13 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import database from './config/database.js'
 import productRouter from './routes/productRoute.js';
 import userRouter from './routes/userRoute.js';
 import cartRouter from './routes/cartRoute.js';
 import orderRouter from './routes/orderRoute.js';
 import * as cron from 'node-cron';
+
+import { setMaintenanceMode } from './utils/maintenanceMode.js';
 
 dotenv.config();
 

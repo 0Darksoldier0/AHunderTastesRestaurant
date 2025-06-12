@@ -1,28 +1,50 @@
 .orders {
-    padding-top: 120px;
-    padding-left: 50px;
-    padding-right: 50px;
-    min-height: 90vh;
-    /* background-color: white; */
+    padding: 120px 50px;
+    background-color: white;
     animation: fadeIn 1s;
+    min-height: 100vh;
 }
-
 .orders h1 {
-    color: brown;
-    text-align: center;
-    margin-bottom: 40px;
     font-size: 50px;
     font-weight: 600;
+    color: brown;
+    text-align: center;
 }
-
 .orders h2 {
-    font-size: 30px;
-    color: rgb(90, 90, 90);
-    margin-bottom: 25px;
     font-weight: 600;
+    color: rgb(80, 80, 80);
+    font-size: 30px;
+    margin-top: 40px;
 }
 
-.titles {
+.top-section2 button {
+    width: 130px;
+    height: 45px;
+    margin-right: 50px;
+    font-weight: 600;
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 25px;
+    background-color: brown;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.top-section2 button:hover {
+    opacity: 0.8;
+}
+
+.list-table-format2 {
+    display: grid;
+    grid-template-columns:  100px 1fr 1fr 1fr ;
+    align-items: center;
+    justify-items: center;
+    gap: 10px;
+    padding: 20px 0px;  
+    border-bottom: 1px solid rgb(201, 201, 201);
+    transition: all 0.2s;
+}
+
+.list-table2 .title2 {
     display: grid;
     grid-template-columns: 100px 1fr 1fr 1fr; 
     font-weight: 600;
@@ -30,54 +52,33 @@
     justify-content: center;
     justify-items: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
     padding-bottom: 15px;
-    padding-top: 10px; 
+    padding-top: 10px;
 }
-
-.orders-order {
-    display: grid;
-    grid-template-columns: 100px 1fr 1fr 1fr; 
-    font-weight: 500;
-    color: rgb(90, 90, 90);
-    row-gap: 20px; 
-    padding: 15px 0;
-    border-bottom: 1px solid rgb(230, 230, 230);
-    align-items: center;
-    justify-items: center;
-    text-align: center;
-    background-color: white;
-    transition: all 0.2s;
-}
-.orders-order:hover {
+.list-table-format2:hover{
     background-color: rgb(245, 245, 245); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transform: scale(1.01); 
 }
 
-.orders-order img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
+.list-table-format2 img {
+    width: 40px;
+    object-fit: cover;
 }
 
-.order-id {
+.list-table-format2 p {
+    font-size: 20px;
+}
+.list-table-format2 .order-id {
     cursor: pointer;
-    transition: color 0.15s;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid transparent;
+    transition: all 0.15s;
 }
-
-.order-id:hover {
-    color: brown;
+.list-table-format2 .order-id:hover {
     border-bottom: 1px solid brown;
-}
-
-.order-incomplete-complete {
-    margin-bottom: 60px;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    overflow: hidden;
-    background-color: #f9f9f9;
-    box-shadow: 5px 5px 10px rgb(200, 200, 200);
+    color: brown;
 }
 
 .order-status {

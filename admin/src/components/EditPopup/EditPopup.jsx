@@ -17,6 +17,7 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
         category_id: product.category_id,
         availability: product.availability
     });
+
     const [isAvailable, setIsAvailable] = useState(product.availability ? true : false)
 
     const categories = [
@@ -25,14 +26,6 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
         { category_id: 12, category_name: 'Drinks' },
         { category_id: 13, category_name: 'Desserts' },
     ];
-
-    useEffect(() => {
-        setEditedProductData(editedProductData);
-    }, [editedProductData]);
-
-    useEffect(() => {
-        console.log(editedProductData)
-    }, [editedProductData])
 
     const onChangeHandler = (event) => {
         const { name, value } = event.target;
@@ -51,8 +44,8 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
         }
     };
 
-    const onSubmitHandler = async (e) => {
-        e.preventDefault();
+    const onSubmitHandler = async (event) => {
+        event.preventDefault();
         if (editedProductData.product_name.trim() === "" || Number(editedProductData.price) < MIN_PRICE || editedProductData.description === "") {
             toast.error("Please enter valid data");
             return;
@@ -77,10 +70,19 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
         }
     };
 
+    useEffect(() => {
+        setEditedProductData(editedProductData);
+    }, [editedProductData]);
+
+    // useEffect(() => {
+    //     console.log(editedProductData)
+    // }, [editedProductData])
+
     return (
         <div className="edit-popup-container" onClick={onClose}>
             <div className="edit-popup" onClick={e => e.stopPropagation()}>
                 <h1>Edit Product</h1>
+                <p className='close-edit-popup-btn' onClick={onClose}>&times;</p>
                 <form onSubmit={onSubmitHandler}>
                     <div className="form-group">
                         <label>Product Name</label>
@@ -112,7 +114,6 @@ const EditPopup = ({ product, onClose, onUpdateSuccess }) => {
                     </div>
                     <div className='buttons'>
                         <button className='save-change-btn' type="submit">Save Changes</button>
-                        <button onClick={onClose} className='cancel-btn' type='button'>Return</button>
                     </div>
 
                 </form>

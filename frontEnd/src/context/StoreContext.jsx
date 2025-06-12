@@ -162,7 +162,9 @@ const StoreContextProvider = (props) => {
         loadData();
 
         const intervalId = setInterval(async () => {
-            await loadCartData(localStorage.getItem("token"));
+            if (token) {
+                await loadCartData(localStorage.getItem("token"));
+            }
             await fetchFoodList();
         }, 10000);
 

@@ -5,7 +5,6 @@ import { BACKEND_URL } from '../../../config/constants'
 import axios from 'axios'
 
 const VerifyOrder = () => {
-    let i = 1;
     const [searchParams, setSearchParams] = useSearchParams();
     const success = searchParams.get("success");
     const order_id = searchParams.get("order_id");

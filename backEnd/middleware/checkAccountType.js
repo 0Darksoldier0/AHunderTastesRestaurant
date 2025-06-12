@@ -1,13 +1,24 @@
 
-const checkAccountType = (req, res, next) => {
+const checkAdminAccountType = (req, res, next) => {
     const {type} = req.user;
-    console.log(type);
+    // console.log(type);
     if (type == process.env.ADMIN_PRIVILEGE_ACCOUNT) {
         next();
     }
     else {
-        return res.sendStatus(404);
+        return res.sendStatus(403);
     }
 }
 
-export {checkAccountType};
+const checkAdminAndStaffAccountType = (req, res, next) => {
+    const {type} = req.user;
+    // console.log(type);
+    if (type == process.env.ADMIN_PRIVILEGE_ACCOUNT || type == process.env.STAFF_PRIVILEGE_ACCOUNT) {
+        next();
+    }
+    else {
+        return res.sendStatus(403);
+    }
+}
+
+export {checkAdminAccountType, checkAdminAndStaffAccountType};

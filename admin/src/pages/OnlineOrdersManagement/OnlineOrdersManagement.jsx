@@ -11,10 +11,10 @@ import { toast } from 'react-toastify'
 
 const OnlineOrdersManagement = () => {
 
-    const { token, ordersData} = useContext(StoreContext);
+    const { token, ordersData } = useContext(StoreContext);
     const [showOrderDetailsPopup, setShowOrderDetailsPopup] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(null);
-    
+
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -37,7 +37,7 @@ const OnlineOrdersManagement = () => {
             else {
                 toast.error("Server error, please try again");
             }
-        }   
+        }
     }
 
     const onOrderIdClickHandler = (order) => {
@@ -56,25 +56,27 @@ const OnlineOrdersManagement = () => {
         const end = endDate ? new Date(endDate) : null;
 
         return order.status === "delivered" &&
-               (!start || orderDate >= start) &&
-               (!end || orderDate <= end);
+            (!start || orderDate >= start) &&
+            (!end || orderDate <= end);
     });
 
     return (
         <div className='orders'>
+
             <h1>All Orders</h1>
+
             <h2>New Orders</h2>
-            <div className='titles'>
-                <p></p>
-                <p>OrderID</p>
-                <p>Order Date</p>
-                <p>Order Status</p>
-            </div>
-            <div className='order-incomplete-complete'>
+            <div className='list-table2'>
+                <div className='title2'>
+                    <p></p>
+                    <p>OrderID</p>
+                    <p>Order Date</p>
+                    <p>Order Status</p>
+                </div>
                 {ordersData.map((order, index) => {
                     if (order.status !== "delivered") {
                         return (
-                            <div key={index} className='titles orders-order'>
+                            <div key={index} className='list-table-format2'>
                                 <img src={assets.parcel_icon} alt="" />
                                 <p onClick={() => onOrderIdClickHandler(order)} className='order-id'>{order.order_id}</p>
                                 <p>{order.order_date.replace('T', ' ').replace('.000Z', '')}</p>
@@ -88,6 +90,7 @@ const OnlineOrdersManagement = () => {
                     }
                 })}
             </div>
+            <br /><br /><br /><hr />
             <h2>Completed Orders</h2>
             <div className="date-range-selector">
                 <label htmlFor="startDate">Start Date:</label>
@@ -105,10 +108,11 @@ const OnlineOrdersManagement = () => {
                     onChange={(e) => setEndDate(e.target.value)}
                 />
             </div>
-            <div className='order-incomplete-complete'>
+
+            <div className='list-table2'>
                 {filteredOrders.map((order, index) => {
                     return (
-                        <div key={index} className='titles orders-order'>
+                        <div key={index} className='list-table-format2'>
                             <img src={assets.parcel_icon} alt="" />
                             <p onClick={() => onOrderIdClickHandler(order)} className='order-id'>{order.order_id}</p>
                             <p>{order.order_date.replace('T', ' ').replace('.000Z', '')}</p>

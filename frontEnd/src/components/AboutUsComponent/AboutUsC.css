@@ -50,11 +50,13 @@
     display: flex;
     flex-direction: row;
     width: 350px;
+    align-items: start;
 }
 
 .middle-subsection img {
-    width: 80px;
-    margin-right: 10px;
+    width: 36px;
+    object-fit: contain;
+    margin-right: 20px;
 }
 
 .middle-subsection .right-section h3 {

@@ -20,12 +20,13 @@
     align-items: center;
 }
 .navbar .logo img{
-    width: 100px;
+    width: 50px;
     margin-right: 20px;
 }
 .navbar .logo p {
     font-size: 40px;
     font-weight: 500;
+    font-style: italic;
 }
 
 .navbar-menu {

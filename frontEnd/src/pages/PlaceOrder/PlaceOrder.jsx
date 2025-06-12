@@ -25,10 +25,6 @@ const PlaceOrder = () => {
         phoneNumber: ""
     })
 
-    useEffect(() => {
-        console.log(shippingData)
-    }, [shippingData])
-
     const onChangeHandler = (event) => {
         const {name, value} = event.target;
         setShippingData(data => ({...data, [name]: value}));

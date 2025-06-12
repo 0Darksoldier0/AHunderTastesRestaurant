@@ -20,7 +20,8 @@
     align-items: center;
 }
 .navbar .logo img{
-    width: 100px;
+    width: 50px;
+    object-fit: cover;
     margin-right: 20px;
 }
 .navbar .logo p {
@@ -51,7 +52,6 @@
     padding: 5px 15px;
     border-bottom: 3px solid brown;
     padding-bottom: 3px;
-    /* background-color: brown */
     border-radius: 12px;
 }
 

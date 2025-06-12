@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar/Navbar'
 import ScrollToTop from './context/ScrollToTop'
 import SignIn from './pages/SignIn/SignIn'
-import AddProduct from './components/MenuManageComponents/AddProduct/AddProduct'
+import AddProduct from './pages/AddProduct/AddProduct'
 import MenuManagement from './pages/MenuManagement/MenuManagement'
 import OrdersManagement from './pages/OrdersManagement/OrdersManagement'
 import OnlineOrdersManagement from './pages/OnlineOrdersManagement/OnlineOrdersManagement'
@@ -12,6 +12,8 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/ReactToastify.css'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import DefaultRoute from './components/DefaultRoute/DefaultRoute'
+import StaffManagement from './pages/StaffManagement/StaffManagement'
+import AddStaff from './pages/AddStaff/AddStaff'
 
 const App = () => {
 
@@ -27,8 +29,10 @@ const App = () => {
                 <Route path='/menuManagement/addProduct' element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
                 <Route path='/onlineOrdersManagement' element={<ProtectedRoute><OnlineOrdersManagement /></ProtectedRoute>} />
                 <Route path='/ordersManagement' element={<ProtectedRoute><OrdersManagement /></ProtectedRoute>} />
+                <Route path='/staffManagement' element={<ProtectedRoute><StaffManagement /></ProtectedRoute>} />
+                <Route path='/staffManagement/addStaff' element={<ProtectedRoute><AddStaff /></ProtectedRoute>} />
 
-                <Route path="*" element={<DefaultRoute></DefaultRoute>} />
+                {/* <Route path="*" element={<DefaultRoute></DefaultRoute>} /> */}
             </Routes>
 
         </div>
