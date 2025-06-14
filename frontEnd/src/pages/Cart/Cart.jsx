@@ -10,8 +10,7 @@ import { BACKEND_URL } from '../../../config/constants';
 const Cart = () => {
 
     const token = localStorage.getItem('token');
-    const { food_list, cartItems, addToCart, removeFromCart, getCartTotalAmount, loadCartData, fetchFoodList} = useContext(StoreContext);
-    const deliveryFee = 35000;
+    const { food_list, cartItems, addToCart, removeFromCart, getCartTotalAmount, loadCartData, fetchFoodList } = useContext(StoreContext);
     const navigate = useNavigate();
 
     const processToCheckOutHandler = async () => {
@@ -48,7 +47,7 @@ const Cart = () => {
                 {food_list.map((item, index) => {
                     if (cartItems[item.product_id] > 0) {
                         return (
-                            <div>
+                            <div key={index}>
                                 <div className='cart-items-title cart-items-item'>
                                     <img className='food' src={`${BACKEND_URL}` + "/images/" + item.image} alt="" />
                                     <p>{item.product_name}</p>
@@ -68,22 +67,10 @@ const Cart = () => {
             </div>
             <div className="cart-bottom">
                 <div className='cart-total'>
-                    <h2>Cart Totals</h2>
-                    <div>
-                        <div className="cart-total-detals">
-                            <p>Subtotal</p>
-                            <p>{getCartTotalAmount()} vnd</p>
-                        </div>
-                        <hr />
-                        <div className="cart-total-detals">
-                            <p>Delivery Fee</p>
-                            <p>{getCartTotalAmount() ? deliveryFee : 0}</p>
-                        </div>
-                        <hr />
-                        <div className="cart-total-detals">
-                            <b>Total</b>
-                            <b>{getCartTotalAmount() ? getCartTotalAmount() + deliveryFee : 0} vnd</b>
-                        </div>
+
+                    <div className="cart-total-detals">
+                        <b>Total</b>
+                        <b>{getCartTotalAmount()} vnd</b>
                     </div>
                     <button onClick={() => token ? processToCheckOutHandler() : toast.error("Please sign in")}>PROCEED TO CHECKOUT</button>
                 </div>

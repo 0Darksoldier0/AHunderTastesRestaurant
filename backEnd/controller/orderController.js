@@ -1,16 +1,17 @@
 import database from '../config/database.js'
 import Stripe from 'stripe'
+import bcrypt from 'bcrypt'
 import { FRONTEND_URL } from '../config/constants.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 
 const placeOrder = async (req, res) => {
     const { username } = req.user;
     const { cartItems, shipping_details } = req.body;
 
-    const insert_orders_query = "INSERT INTO online_orders(order_id, username, shipping_details) VALUES(?, ?, ?)";
+    const insert_orders_query = "INSERT INTO online_orders(order_id, username, shipping_details, payment_token) VALUES(?, ?, ?, ?)";
     const insert_order_details_query = "INSERT INTO online_order_details VALUES(?, ?, ?)";
-    const update_cart_query = "UPDATE users SET cart = '{}' WHERE username = ?";
 
     console.log("printing items: ")
     console.log(cartItems);
@@ -18,12 +19,20 @@ const placeOrder = async (req, res) => {
 
     try {
         const order_id = String(Math.floor(performance.now()) + Date.now());
-        await database.promise().query(insert_orders_query, [order_id, username, shipping_details]);
+
+        let success_payment_token = '';
+        for (let i = 0; i < 50; i++) {
+            success_payment_token += Math.random().toString(36).substring(2, 3);
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const encrypted_PaymentToken = await bcrypt.hash(success_payment_token, salt);
+
+        await database.promise().query(insert_orders_query, [order_id, username, shipping_details, encrypted_PaymentToken]);
 
         cartItems.forEach(async (item) => {
             await database.promise().query(insert_order_details_query, [order_id, item.product_id, item.quantity]);
-        })
-        await database.promise().query(update_cart_query, [username]);
+        });
 
         const line_items = cartItems.map((item) => ({
             price_data: {
@@ -47,36 +56,57 @@ const placeOrder = async (req, res) => {
             quantity: 1
         })
 
-        console.log("Before stripe session");
+        let fail_payment_token = '';
+        for (let i = 0; i < 50; i++) {
+            fail_payment_token += Math.random().toString(36).substring(2, 3);
+        }
+
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: "payment",
-            success_url: `${FRONTEND_URL}/verifyOrder?success=true&order_id=${order_id}`,
-            cancel_url: `${FRONTEND_URL}/verifyOrder?success=false&order_id=${order_id}`
+            success_url: `${FRONTEND_URL}/verifyOrder?payment_token=${success_payment_token}&order_id=${order_id}`,
+            cancel_url: `${FRONTEND_URL}/verifyOrder?payment_token=${fail_payment_token}&order_id=${order_id}`
         })
-        console.log("session.url: " + session.url);
-        res.json({ success: true, session_url: session.url });
+
+        return res.json({ success: true, session_url: session.url });
     }
     catch (error) {
         console.error("(PlaceOrder) Error placing order: ", error);
-        res.json({ sucess: false, message: "Error placing order" });
+        returnres.json({ sucess: false, message: "Error placing order" });
     }
 }
 
+
 const verifyOrder = async (req, res) => {
-    const { order_id, success } = req.body;
-    const update_query = "UPDATE online_orders SET payment = ? WHERE order_id = ?";
+    const { order_id, payment_token } = req.body;
+
+    const select_paymentToken_query = "SELECT payment_token FROM online_orders WHERE order_id = ?";
+
     try {
-        if (success == "true") {
-            await database.promise().query(update_query, [1, order_id]);
-            res.json({ success: true, message: "Paid" })
+        const [results] = await database.promise().query(select_paymentToken_query, [order_id]);
+        const isPaymentTokenMatch = await bcrypt.compare(payment_token, results[0].payment_token);
+
+        if (isPaymentTokenMatch) {
+            const update_payment_query = "UPDATE online_orders SET payment = ? WHERE order_id = ?";
+            const update_userCart_query = "UPDATE users SET cart = '{}' WHERE username = (SELECT username FROM online_orders WHERE order_id = ?)";
+
+            await database.promise().query(update_payment_query, [1, order_id]);
+            await database.promise().query(update_userCart_query, [order_id]);
+
+            console.log('(Backend) payment fail')
+            return res.json({success: true});
+        }
+        else {
+            console.log('(Backend) payment fail')
+            return res.status({success: false});
         }
     }
     catch (error) {
         console.error("(VerifyOrder) Error verifying order: ", error);
-        return res.json({ success: false, message: "Error verifying order" });
+        return res.status(500);
     }
 }
+
 
 const getUserOrders = async (req, res) => {
     const { username } = req.user;
@@ -98,6 +128,7 @@ const getUserOrders = async (req, res) => {
     }
 }
 
+
 const getOrderDetails = async (req, res) => {
     const { order_id } = req.body;
     const select_query = `SELECT od.order_id, od.product_id, p.product_name, p.price, od.product_quantity, (p.price * od.product_quantity) as total 
@@ -114,6 +145,7 @@ const getOrderDetails = async (req, res) => {
         return res.status(500).json({ message: "Error fetching user details" })
     }
 }
+
 
 const getOrders = async (req, res) => {
     const select_query = `SELECT o.order_id, o.order_date, o.shipping_details, sum((p.price * od.product_quantity))  as subtotal, o.status
@@ -146,5 +178,6 @@ const updateStatus = async (req, res) => {
         return res.status(500).json({ message: "Error updating order status" })
     }
 }
+
 
 export { placeOrder, verifyOrder, getUserOrders, getOrderDetails, getOrders, updateStatus }

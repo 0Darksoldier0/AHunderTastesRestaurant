@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 const SignIn = () => {
 
-    const { token, setToken, setMenu, fetchFoodList, fetchOrders, fetchProductPrice} = useContext(StoreContext);
+    const { token, setToken, setMenu, fetchFoodList, fetchOrders, fetchProductPrice, fetchUsers} = useContext(StoreContext);
 
     const navigate = useNavigate();
 
@@ -47,9 +47,9 @@ const SignIn = () => {
                 await fetchFoodList(response.data.token);
                 await fetchOrders(response.data.token);
                 await fetchProductPrice(response.data.token);
+                await fetchUsers(response.data.token);
 
                 navigate('/');
-                setMenu("Dashboard")
             }
         }
         catch (error) {

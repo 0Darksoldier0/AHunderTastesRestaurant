@@ -106,6 +106,13 @@ const StoreContextProvider = (props) => {
             }
         }
         loadData();
+
+        const intervalId = setInterval(async () => {
+            if (token) {
+                await fetchOrders(localStorage.getItem("token"));
+            }
+            
+        }, 10000);
     }, [])
 
     useEffect(() => {

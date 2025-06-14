@@ -5,19 +5,28 @@ import { BACKEND_URL } from '../../../config/constants'
 import axios from 'axios'
 
 const VerifyOrder = () => {
+
     const [searchParams, setSearchParams] = useSearchParams();
-    const success = searchParams.get("success");
+    const payment_token = searchParams.get("payment_token");
     const order_id = searchParams.get("order_id");
     const navigate = useNavigate();
 
     const verifyOrderPayment = async () => {
-        const response = await axios.post(`${BACKEND_URL}/api/order/verifyOrder`, {success, order_id});
-        if (response.data.success) {
-            navigate("/orders")
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/order/verifyOrder`, { payment_token, order_id });
+            if (response.data.success) {
+                navigate("/orders");
+                window.location.reload();
+
+            }
+            else {
+                console.log("payment failed");                
+            }
         }
-        else {
-            navigate("/");
+        catch (error) {
+            console.log(error);
         }
+        
     }
 
     useEffect(() => {
