@@ -11,7 +11,7 @@ const StoreContextProvider = (props) => {
 
     const [menu, setMenu] = useState(() => {
         const savedMenu = localStorage.getItem("currentMenu");
-        return savedMenu ? savedMenu : "Manage Menu";
+        return savedMenu ? savedMenu : "Dashboard";
     });
 
     const [token, setToken] = useState("");
@@ -22,6 +22,7 @@ const StoreContextProvider = (props) => {
     // Data visulization
     const [priceData, setPriceData] = useState([]);
 
+    
     const fetchFoodList = async (token) => {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/product/listall`, {}, { headers: { token } });
@@ -36,8 +37,7 @@ const StoreContextProvider = (props) => {
             }
             else {
                 console.error("(FetchFoodList) Server error")
-            }
-            
+            } 
         }
     }
 
@@ -113,6 +113,8 @@ const StoreContextProvider = (props) => {
             }
             
         }, 10000);
+
+        return () => clearInterval(intervalId);
     }, [])
 
     useEffect(() => {

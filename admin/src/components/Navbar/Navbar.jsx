@@ -19,7 +19,7 @@ const Navbar = () => {
 
     return (
         <div className='navbar'>
-            <Link to={!token ? '/signIn' : '/'} onClick={() => setMenu("Dashboard")}><div className='logo'>
+            <Link to={!token ? '/signIn' : '/'}><div className='logo'>
                 <img src={assets.restaurant_logo} alt="logo" />
                 <p>A Hundred Tastes</p>
             </div></Link>

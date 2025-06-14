@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 
 const OnlineOrdersManagement = () => {
 
-    const { token, ordersData } = useContext(StoreContext);
+    const { token, ordersData, fetchOrders } = useContext(StoreContext);
     const [showOrderDetailsPopup, setShowOrderDetailsPopup] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(null);
 
@@ -25,7 +25,7 @@ const OnlineOrdersManagement = () => {
             const response = await axios.post(`${BACKEND_URL}/api/order/updateStatus`, { status: currentStatus, order_id: order_id }, { headers: { token } });
             if (response.status === 200) {
                 if (currentStatus === "delivered") {
-                    window.location.reload();
+                    fetchOrders(token);
                 }
                 toast.success(response.data.message);
             }
