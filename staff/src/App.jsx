@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import Navbar from './components/Navbar/Navbar'
 import SignIn from './pages/SignIn/SignIn'
 import Menu from './pages/Menu/Menu'
+import NewOrder from './pages/NewOrder/NewOrder'
 
 const App = () => {
     return (
@@ -16,8 +17,9 @@ const App = () => {
             <ScrollToTop />
             <Navbar />
             <Routes>
+                <Route path='/' element={<NewOrder />} />
                 <Route path='/signIn' element={<SignIn />} />
-                <Route path='/menu' element={<Menu />} />
+                <Route path='/menu' element={<ProtectedRoute><Menu /></ProtectedRoute>} />
 
                 <Route path="*" element={<DefaultRoute></DefaultRoute>} />
             </Routes>

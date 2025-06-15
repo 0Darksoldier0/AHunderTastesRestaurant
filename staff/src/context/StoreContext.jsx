@@ -14,7 +14,13 @@ const StoreContextProvider = (props) => {
         return savedMenu ? savedMenu : "";
     });
 
+    const [table, setTable] = useState(() => {
+        const savedTable = localStorage.getItem("currentTable");
+        return savedTable ? savedTable : "";
+    });
+
     const [token, setToken] = useState("");
+    const [orderId, setOrderId] = useState("");
     const [food_list, setFoodList] = useState([]);
     const [cartItems, setCartItems] = useState({});
     const [availTableList, setAvailTableList] = useState([]);
@@ -64,36 +70,36 @@ const StoreContextProvider = (props) => {
         else {
             setCartItems((prev) => ({ ...prev, [product_id]: prev[product_id] + 1 }));
         }
-        if (token) {
-            try {
-                await axios.post(`${BACKEND_URL}/api/cart/add`, { product_id }, { headers: { token } });
-            }
-            catch (error) {
-                if (error.response) {
-                    console.error("(AddToCart-StoreContext) " + error.response.data.message);
-                }
-                else {
-                    console.error("(AddToCart-StoreContext) Server error")
-                }
-            }
-        }
+        // if (token) {
+        //     try {
+        //         await axios.post(`${BACKEND_URL}/api/cart/add`, { product_id }, { headers: { token } });
+        //     }
+        //     catch (error) {
+        //         if (error.response) {
+        //             console.error("(AddToCart-StoreContext) " + error.response.data.message);
+        //         }
+        //         else {
+        //             console.error("(AddToCart-StoreContext) Server error")
+        //         }
+        //     }
+        // }
     }
 
     const removeFromCart = async (product_id) => {
         setCartItems((prev) => ({ ...prev, [product_id]: prev[product_id] - 1 }))
-        if (token) {
-            try {
-                await axios.post(`${BACKEND_URL}/api/cart/remove`, { product_id }, { headers: { token } });
-            }
-            catch (error) {
-                if (error.response) {
-                    console.error("(RemoveFromCart-Storecontext) " + error.response.data.message);
-                }
-                else {
-                    console.error("(RemoveFromCart-Storecontext) Server Error");
-                }
-            }
-        }
+        // if (token) {
+        //     try {
+        //         await axios.post(`${BACKEND_URL}/api/cart/remove`, { product_id }, { headers: { token } });
+        //     }
+        //     catch (error) {
+        //         if (error.response) {
+        //             console.error("(RemoveFromCart-Storecontext) " + error.response.data.message);
+        //         }
+        //         else {
+        //             console.error("(RemoveFromCart-Storecontext) Server Error");
+        //         }
+        //     }
+        // }
     }
 
     const getCartTotalAmount = () => {
@@ -112,10 +118,11 @@ const StoreContextProvider = (props) => {
 
     const fetchAvailableTable = async (token) => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getTable`, {}, {headers: token});
+            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getTable`, {}, {headers: {token}});
 
             if (response.status === 200) {
                 setAvailTableList(response.data.tables);
+                // console.log(response.data.tables);
             }
         }
         catch (error) {
@@ -128,19 +135,23 @@ const StoreContextProvider = (props) => {
         async function loadData() {
             await fetchFoodList();
             if (localStorage.getItem("token")) {
+                if (localStorage.getItem("orderId")) {
+                    setOrderId(localStorage.getItem("orderId"));
+                }
                 setToken(localStorage.getItem("token"));
+                await fetchAvailableTable(localStorage.getItem("token"))
             }
         }
         loadData();
 
-        const intervalId = setInterval(async () => {
-            if (token) {
-                // await fetchOrders(localStorage.getItem("token"));
-            }
+        // const intervalId = setInterval(async () => {
+        //     if (token) {
+        //         // await fetchOrders(localStorage.getItem("token"));
+        //     }
             
-        }, 10000);
+        // }, 10000);
 
-        return () => clearInterval(intervalId);
+        // return () => clearInterval(intervalId);
     }, [])
 
 
@@ -179,6 +190,11 @@ const StoreContextProvider = (props) => {
         addToCart,
         removeFromCart,
         getCartTotalAmount,
+
+        availTableList,
+        
+        orderId,
+        setOrderId
     }
 
     return (
