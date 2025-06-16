@@ -1,24 +1,26 @@
 import React from 'react'
-import './OrderDetailsPopup.css'
+import './OnlineOrderDetailsPopup.css'
 import { BACKEND_URL } from '../../../config/constants';
 import axios from 'axios';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-const OrderDetailsPopup = ({ order, token, onClose }) => {
+const OnlineOrderDetailsPopup = ({ order, token, onClose }) => {
     // console.log(order);
     const [orderDetails, setOrderDetails] = useState([]);
 
-    const getOrderDetails = async () => {
+    const getOnlineOrderDetails = async () => {
         const response = await axios.post(`${BACKEND_URL}/api/order/getOrderDetails`, { order_id: order.order_id }, { headers: { token } })
         setOrderDetails(response.data.orderDetails);
     }
+    
     useEffect(() => {
         if (token) {
-            getOrderDetails();
+            getOnlineOrderDetails();
         }
         // console.log(orderDetails);
     }, [])
+
     return (
         <div className='order-details-container' onClick={onClose}>
             <div className="order-details-content" onClick={e => e.stopPropagation()}>
@@ -67,4 +69,4 @@ const OrderDetailsPopup = ({ order, token, onClose }) => {
         </div>
     )
 }
-export default OrderDetailsPopup
+export default OnlineOrderDetailsPopup

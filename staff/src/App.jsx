@@ -9,6 +9,7 @@ import Navbar from './components/Navbar/Navbar'
 import SignIn from './pages/SignIn/SignIn'
 import Menu from './pages/Menu/Menu'
 import NewOrder from './pages/NewOrder/NewOrder'
+import Cart from './pages/Cart/Cart'
 
 const App = () => {
     return (
@@ -17,10 +18,10 @@ const App = () => {
             <ScrollToTop />
             <Navbar />
             <Routes>
-                <Route path='/' element={<NewOrder />} />
+                <Route path='/' element={<ProtectedRoute><NewOrder /></ProtectedRoute>} />
                 <Route path='/signIn' element={<SignIn />} />
                 <Route path='/menu' element={<ProtectedRoute><Menu /></ProtectedRoute>} />
-
+                <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
                 <Route path="*" element={<DefaultRoute></DefaultRoute>} />
             </Routes>
 

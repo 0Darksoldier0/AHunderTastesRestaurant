@@ -4,14 +4,14 @@ import { useContext } from 'react'
 import { StoreContext } from '../../context/StoreContext'
 import { assets } from '../../assets/assets'
 import { useState } from 'react'
-import OrderDetailsPopup from '../../components/OrderDetailsPopup/OrderDetailsPopup'
+import OnlineOrderDetailsPopup from '../../components/OnlineOrderDetailsPopup/OnlineOrderDetailsPopup'
 import axios from "axios";
 import { BACKEND_URL } from '../../../config/constants'
 import { toast } from 'react-toastify'
 
 const OnlineOrdersManagement = () => {
 
-    const { token, ordersData, fetchOrders } = useContext(StoreContext);
+    const { token, onlineOrdersData, fetchOnlineOrders } = useContext(StoreContext);
     const [showOrderDetailsPopup, setShowOrderDetailsPopup] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(null);
 
@@ -25,7 +25,7 @@ const OnlineOrdersManagement = () => {
             const response = await axios.post(`${BACKEND_URL}/api/order/updateStatus`, { status: currentStatus, order_id: order_id }, { headers: { token } });
             if (response.status === 200) {
                 if (currentStatus === "delivered") {
-                    fetchOrders(token);
+                    await fetchOnlineOrders(token);
                 }
                 toast.success(response.data.message);
             }
@@ -50,7 +50,7 @@ const OnlineOrdersManagement = () => {
         setShowOrderDetailsPopup(false);
     };
 
-    const filteredOrders = ordersData.filter(order => {
+    const filteredOrders = onlineOrdersData.filter(order => {
         const orderDate = new Date(order.order_date);
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
@@ -63,7 +63,7 @@ const OnlineOrdersManagement = () => {
     return (
         <div className='orders'>
 
-            <h1>All Orders</h1>
+            <h1>All Online Orders</h1>
 
             <h2>New Orders</h2>
             <div className='list-table2'>
@@ -73,7 +73,7 @@ const OnlineOrdersManagement = () => {
                     <p>Order Date</p>
                     <p>Order Status</p>
                 </div>
-                {ordersData.map((order, index) => {
+                {onlineOrdersData.map((order, index) => {
                     if (order.status !== "delivered") {
                         return (
                             <div key={index} className='list-table-format2'>
@@ -90,7 +90,7 @@ const OnlineOrdersManagement = () => {
                     }
                 })}
             </div>
-            <br /><br /><br /><hr />
+            <br /><br /><br />
             <h2>Completed Orders</h2>
             <div className="date-range-selector">
                 <label htmlFor="startDate">Start Date:</label>
@@ -122,7 +122,7 @@ const OnlineOrdersManagement = () => {
                 })}
             </div>
             {showOrderDetailsPopup && currentOrder && (
-                <OrderDetailsPopup
+                <OnlineOrderDetailsPopup
                     order={currentOrder}
                     onClose={closePopupHandler}
                     token={token}

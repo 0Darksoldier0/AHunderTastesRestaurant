@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 const SignIn = () => {
 
-    const { token, setToken, setMenu, fetchFoodList, fetchOrders, fetchProductPrice, fetchUsers} = useContext(StoreContext);
+    const { token, setToken, fetchFoodList, fetchOnlineOrders, fetchProductPrice, fetchUsers, fetchInhouseOrders} = useContext(StoreContext);
 
     const navigate = useNavigate();
 
@@ -45,9 +45,10 @@ const SignIn = () => {
                     password: ""
                 });
                 await fetchFoodList(response.data.token);
-                await fetchOrders(response.data.token);
+                await fetchOnlineOrders(response.data.token);
                 await fetchProductPrice(response.data.token);
                 await fetchUsers(response.data.token);
+                await fetchInhouseOrders(response.data.token)
 
                 navigate('/');
             }

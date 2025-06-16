@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 const NewOrder = () => {
 
-    const { token, availTableList, orderId, setOrderId } = useContext(StoreContext);
+    const { token, availTableList, orderId, setOrderId, fetchOrderData, setSeatId } = useContext(StoreContext);
     const [selectedTable, setSelectedTable] = useState("Select");
     const [customerName, setCustomerName] = useState("");
     const navigate = useNavigate();
@@ -38,6 +38,9 @@ const NewOrder = () => {
                 setOrderId(response.data.order_id)
                 localStorage.setItem("orderId", response.data.order_id);   
                 navigate('/menu');
+                await fetchOrderData(token);
+                setSeatId(selectedTable);
+                localStorage.setItem("seatId", selectedTable);
             }
         }
         catch (error) {

@@ -5,7 +5,7 @@ import ScrollToTop from './context/ScrollToTop'
 import SignIn from './pages/SignIn/SignIn'
 import AddProduct from './pages/AddProduct/AddProduct'
 import MenuManagement from './pages/MenuManagement/MenuManagement'
-import OrdersManagement from './pages/OrdersManagement/OrdersManagement'
+import InHouseOrdersManagement from './pages/InHouseOrdersManagement/InHouseOrdersManagement'
 import OnlineOrdersManagement from './pages/OnlineOrdersManagement/OnlineOrdersManagement'
 import Dashboard from './pages/Dashboard/Dashboard'
 import { ToastContainer } from 'react-toastify'
@@ -28,7 +28,7 @@ const App = () => {
                 <Route path='/menuManagement' element={<ProtectedRoute><MenuManagement /></ProtectedRoute>} />
                 <Route path='/menuManagement/addProduct' element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
                 <Route path='/onlineOrdersManagement' element={<ProtectedRoute><OnlineOrdersManagement /></ProtectedRoute>} />
-                <Route path='/ordersManagement' element={<ProtectedRoute><OrdersManagement /></ProtectedRoute>} />
+                <Route path='/ordersManagement' element={<ProtectedRoute><InHouseOrdersManagement /></ProtectedRoute>} />
                 <Route path='/staffManagement' element={<ProtectedRoute><StaffManagement /></ProtectedRoute>} />
                 <Route path='/staffManagement/addStaff' element={<ProtectedRoute><AddStaff /></ProtectedRoute>} />
 

@@ -36,22 +36,22 @@ const placeOrder = async (req, res) => {
 
         const line_items = cartItems.map((item) => ({
             price_data: {
-                currency: "usd",
+                currency: "vnd",
                 product_data: {
                     name: item.product_name
                 },
-                unit_amount: item.price * 1 * 8
+                unit_amount: item.price
             },
             quantity: item.quantity
         }))
 
         line_items.push({
             price_data: {
-                currency: "usd", // Ensure this currency is supported by your enabled payment methods
+                currency: "vnd", // Ensure this currency is supported by your enabled payment methods
                 product_data: {
-                    name: "Delivery Charges"
+                    name: "Delivery Fee"
                 },
-                unit_amount: 3 * 10 * 8 // Ensure correct conversion
+                unit_amount: 35000 // Ensure correct conversion
             },
             quantity: 1
         })

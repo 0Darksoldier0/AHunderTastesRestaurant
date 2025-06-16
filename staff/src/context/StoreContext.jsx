@@ -2,6 +2,7 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { BACKEND_URL } from "../../config/constants";
 import { useLocation } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 export const StoreContext = createContext(null);
 
@@ -14,16 +15,15 @@ const StoreContextProvider = (props) => {
         return savedMenu ? savedMenu : "";
     });
 
-    const [table, setTable] = useState(() => {
-        const savedTable = localStorage.getItem("currentTable");
-        return savedTable ? savedTable : "";
-    });
-
     const [token, setToken] = useState("");
     const [orderId, setOrderId] = useState("");
+    const [orderDetailData, setOrderDetailData] = useState([]);
+    const [seatId, setSeatId] = useState();
+
     const [food_list, setFoodList] = useState([]);
     const [cartItems, setCartItems] = useState({});
     const [availTableList, setAvailTableList] = useState([]);
+
 
     const fetchFoodList = async () => {
         try {
@@ -43,26 +43,6 @@ const StoreContextProvider = (props) => {
 
     }
 
-    const loadCartData = async (token) => {
-        try {
-            const response = await axios.post(`${BACKEND_URL}/api/cart/get`, {}, { headers: { token } });
-            if (response.status === 200) {
-                setCartItems(response.data.cartData);
-                // console.log(response.data.cartData)
-                return response.data.cartData;
-            }
-        }
-        catch (error) {
-            if (error.response) {
-                console.error("(LoadCartData-StoreContext) " + error.response.data.message);
-            }
-            else {
-                console.error("(LoadCartData-StoreContext) Server error")
-            }
-        }
-        return {};
-    }
-
     const addToCart = async (product_id) => {
         if (!cartItems[product_id]) {
             setCartItems((prev) => ({ ...prev, [product_id]: 1 }));
@@ -70,36 +50,10 @@ const StoreContextProvider = (props) => {
         else {
             setCartItems((prev) => ({ ...prev, [product_id]: prev[product_id] + 1 }));
         }
-        // if (token) {
-        //     try {
-        //         await axios.post(`${BACKEND_URL}/api/cart/add`, { product_id }, { headers: { token } });
-        //     }
-        //     catch (error) {
-        //         if (error.response) {
-        //             console.error("(AddToCart-StoreContext) " + error.response.data.message);
-        //         }
-        //         else {
-        //             console.error("(AddToCart-StoreContext) Server error")
-        //         }
-        //     }
-        // }
     }
 
     const removeFromCart = async (product_id) => {
         setCartItems((prev) => ({ ...prev, [product_id]: prev[product_id] - 1 }))
-        // if (token) {
-        //     try {
-        //         await axios.post(`${BACKEND_URL}/api/cart/remove`, { product_id }, { headers: { token } });
-        //     }
-        //     catch (error) {
-        //         if (error.response) {
-        //             console.error("(RemoveFromCart-Storecontext) " + error.response.data.message);
-        //         }
-        //         else {
-        //             console.error("(RemoveFromCart-Storecontext) Server Error");
-        //         }
-        //     }
-        // }
     }
 
     const getCartTotalAmount = () => {
@@ -118,18 +72,112 @@ const StoreContextProvider = (props) => {
 
     const fetchAvailableTable = async (token) => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getTable`, {}, {headers: {token}});
+            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getTable`, {}, { headers: { token } });
 
             if (response.status === 200) {
                 setAvailTableList(response.data.tables);
-                // console.log(response.data.tables);
             }
         }
         catch (error) {
-            error.response ? console.error(error.response.data.message) : console.error("Server error");
+            if (error.response) {
+                console.error(error.response.data.message)
+            }
+            else {
+                console.error("Server error")
+            }
         }
     }
 
+    const addItemsToOrder = async (token) => {
+        try {
+            if (getCartTotalAmount() > 0) {
+                let orderItems = [];
+                food_list.map((item) => {
+                    if (cartItems[String(item.product_id)] > 0) {
+                        let itemInfo = item;
+                        itemInfo["quantity"] = cartItems[String(item.product_id)];
+                        orderItems.push(itemInfo);
+                    }
+                })
+                const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/addItems`, { cartItems: orderItems, order_id: localStorage.getItem("orderId")}, { headers: { token } });
+                setCartItems({});
+                toast.success("Order sent")
+            }
+            else {
+                toast.error('No Items In Cart');
+            }
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(AddItemsToOrder) " + error.response.data.message)
+            }
+            else {
+                console.error("(AddItemsToOrder) Server error")
+            }
+        }
+    }
+    
+    const fetchOrderDetails = async (token) => {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getDetails`, {order_id: localStorage.getItem("orderId")}, {headers: {token}});
+            if (response.status === 200) {
+                setOrderDetailData(response.data.order_details);
+            }
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(fetchOrderDetails) " + error.response.data.message)
+            }
+            else {
+                console.error("(fetchOrderDetails) Server error")
+            }
+        }
+    }
+
+    const fetchOrderData = async (token) => {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getOrderData`, {order_id: localStorage.getItem("orderId")}, {headers: {token}});
+            if (response.status === 200) {
+                setSeatId(response.data.orderData[0].seat_id)
+            }
+        }
+        catch (error) {
+            if (error.response) {
+                console.error("(FetchOrderData) " + error.response.data.message)
+            }
+            else {
+                console.error("(FetchOrderData) Server error")
+            }
+        }
+    }
+
+    const getOrderTotalAmount = () => {
+        let orderTotal = 0;
+        for (let i = 0; i < orderDetailData.length; i++) {
+            orderTotal += orderDetailData[i].price * orderDetailData[i].quantity;
+            
+        }
+        return orderTotal
+    }
+
+    // const getTableAvailability = async (token) => {
+    //     try {
+    //         const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getSeatAvail`, {seat_id: localStorage.getItem("seatId")}, {headers: {token}})
+    //         return response.data.avail
+    //     }
+    //     catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    const clearState = () => {
+        setOrderId("")
+        setOrderDetailData([])
+        setSeatId("")
+        setCartItems({})
+        localStorage.removeItem("orderId");
+        localStorage.removeItem("seatId");
+    }
 
     useEffect(() => {
         async function loadData() {
@@ -137,6 +185,11 @@ const StoreContextProvider = (props) => {
             if (localStorage.getItem("token")) {
                 if (localStorage.getItem("orderId")) {
                     setOrderId(localStorage.getItem("orderId"));
+                    fetchOrderDetails(localStorage.getItem("token"))
+                    fetchOrderData(localStorage.getItem("token"))
+                }
+                if (localStorage.getItem("seatId")) {
+                    setSeatId(localStorage.getItem("seatId"))
                 }
                 setToken(localStorage.getItem("token"));
                 await fetchAvailableTable(localStorage.getItem("token"))
@@ -144,14 +197,16 @@ const StoreContextProvider = (props) => {
         }
         loadData();
 
-        // const intervalId = setInterval(async () => {
-        //     if (token) {
-        //         // await fetchOrders(localStorage.getItem("token"));
-        //     }
+        const intervalId = setInterval(async () => {
+            await fetchFoodList()
             
-        // }, 10000);
+            if (!orderId) {
+                await fetchAvailableTable(localStorage.getItem("token"));
+            }
 
-        // return () => clearInterval(intervalId);
+        }, 10000);
+
+        return () => clearInterval(intervalId);
     }, [])
 
 
@@ -178,13 +233,12 @@ const StoreContextProvider = (props) => {
 
     const contextValue = {
         menu,
-        token, 
+        token,
         setToken,
-        
+
         fetchFoodList,
         food_list,
 
-        loadCartData,
         cartItems,
         setCartItems,
         addToCart,
@@ -192,9 +246,21 @@ const StoreContextProvider = (props) => {
         getCartTotalAmount,
 
         availTableList,
-        
+        fetchAvailableTable,
+
+        fetchOrderData,
+
+        setSeatId,
+
         orderId,
-        setOrderId
+        setOrderId,
+        addItemsToOrder,
+        orderDetailData,
+        fetchOrderDetails,
+        getOrderTotalAmount,
+        seatId,
+
+        clearState
     }
 
     return (

@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 const SignIn = () => {
 
-    const { token, setToken } = useContext(StoreContext);
+    const { token, setToken, fetchAvailableTable } = useContext(StoreContext);
 
     const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ const SignIn = () => {
                     username: "",
                     password: ""
                 });
-
+                fetchAvailableTable(response.data.token);
                 navigate('/');
             }
         }

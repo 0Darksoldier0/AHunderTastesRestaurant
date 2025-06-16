@@ -1,6 +1,7 @@
 .new-order-container {
     padding-top: 120px;
     min-height: 100vh;
+    animation: fadeIn 1s;
 }
 
 .new-order {

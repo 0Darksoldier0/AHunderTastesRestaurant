@@ -49,6 +49,7 @@ const PlaceOrder = () => {
         //     items: orderItems,
         //     amount: getCartTotalAmount() + deliveryFee
         // }
+        
         const shippingDetails_JSON = JSON.stringify(shippingData);
         console.log(shippingDetails_JSON);
         try {

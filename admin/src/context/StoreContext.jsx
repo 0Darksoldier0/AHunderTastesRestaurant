@@ -16,7 +16,8 @@ const StoreContextProvider = (props) => {
 
     const [token, setToken] = useState("");
     const [foodList, setFoodList] = useState([]);
-    const [ordersData, setOrdersData] = useState([]);
+    const [onlineOrdersData, setOnlineOrdersData] = useState([]);
+    const [inHouseOrdersData, setInHouseOrderData] = useState([]);
     const [staffList, setStaffList] = useState([]);
     
     // Data visulization
@@ -41,12 +42,12 @@ const StoreContextProvider = (props) => {
         }
     }
 
-    const fetchOrders = async (token) => {
+    const fetchOnlineOrders = async (token) => {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/order/list`, {}, { headers: { token } });
             if (response.status === 200) {
-                setOrdersData(response.data.orders);
-                // console.log(response.data.orders);
+                setOnlineOrdersData(response.data.orders);
+                console.log(response.data.orders);
             }
         }
         catch (error) {
@@ -56,6 +57,20 @@ const StoreContextProvider = (props) => {
             else {
                 console.error("(FetchOrders) Server error");
             }
+        }
+    }
+
+    const fetchInhouseOrders = async (token) => {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/list`, {}, { headers: { token } });
+            
+            if (response.status === 200) {
+                setInHouseOrderData(response.data.orders);
+                console.log(response.data.orders)
+            }
+        }
+        catch (error) {
+            error.response ? console.error(error.response.data.message) : console.error("Server error");
         }
     }
 
@@ -100,18 +115,20 @@ const StoreContextProvider = (props) => {
             if (localStorage.getItem("token")) {
                 setToken(localStorage.getItem("token"));
                 await fetchFoodList(localStorage.getItem("token"));
-                await fetchOrders(localStorage.getItem("token"))
+                await fetchOnlineOrders(localStorage.getItem("token"))
                 await fetchProductPrice(localStorage.getItem("token"))
                 await fetchUsers(localStorage.getItem("token"));
+                await fetchInhouseOrders(localStorage.getItem("token"));
             }
         }
         loadData();
 
         const intervalId = setInterval(async () => {
-            if (token) {
-                await fetchOrders(localStorage.getItem("token"));
+            const currentToken = localStorage.getItem("token"); // Get the latest token
+            if (currentToken) {
+                await fetchOnlineOrders(currentToken);
+                await fetchInhouseOrders(currentToken);
             }
-            
         }, 10000);
 
         return () => clearInterval(intervalId);
@@ -154,10 +171,14 @@ const StoreContextProvider = (props) => {
         setMenu,
         token,
         setToken,
+
         foodList,
         fetchFoodList,
-        ordersData,
-        fetchOrders,
+        onlineOrdersData,
+        fetchOnlineOrders,
+
+        inHouseOrdersData,
+        fetchInhouseOrders,
 
         priceData,
         fetchProductPrice,

@@ -8,12 +8,12 @@ const Navbar = () => {
 
     const navigate = useNavigate();
 
-    const { token, setToken, menu } = useContext(StoreContext);
+    const { getCartTotalAmount, token, setToken, menu, orderId } = useContext(StoreContext);
 
     const onSignOutClickHandler = () => {
-        setToken("");   
+        setToken("");
         localStorage.removeItem("token");
-        navigate('/signIn'); 
+        navigate('/signIn');
         window.location.reload();
     }
 
@@ -29,11 +29,22 @@ const Navbar = () => {
                         <ul className='navbar-menu'>
                             <Link to='/menu' className={menu === "Menu" ? "active" : "inactive"}>Menu</Link>
                         </ul>
-                        <div className="navbar-right">
+                        {/* <div className="navbar-right">
                             <button onClick={onSignOutClickHandler}>Sign Out</button>
-                        </div></>
+                        </div> */}
+                    </>
                     : <></>
             }
+            <div className="navbar-right">
+                <div className="navbar-basket-icon">
+                    <Link to='/cart'><img src={assets.basket_icon} alt="" /></Link>
+                    <div className={getCartTotalAmount() ? "dot" : ""}></div>
+                </div>
+                {!orderId && token
+                    ?<button onClick={() => onSignOutClickHandler()}>Sign Out</button>
+                    :<></>
+                }
+            </div>
 
         </div>
     )

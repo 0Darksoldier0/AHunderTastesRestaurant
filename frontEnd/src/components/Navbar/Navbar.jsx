@@ -8,24 +8,13 @@ const Navbar = () => {
 
     const navigate = useNavigate();
 
-    const {getCartTotalAmount, token, setToken, menu, setMenu} = useContext(StoreContext);
+    const {getCartTotalAmount, token, setToken, menu } = useContext(StoreContext);
 
     const onSignOutClickHandler = () => {
         localStorage.removeItem("token");
         setToken("");
-        setMenu("Home");
         navigate('/');
         window.location.reload();
-    }
-
-    const onAccountClickHandler = () => {
-        navigate('/account');
-        setMenu("");
-    }
-
-    const onOrderClickHandler = () => {
-        navigate('/orders');
-        setMenu("");
     }
 
     return (
@@ -49,9 +38,9 @@ const Navbar = () => {
                     :   <div className='navbar-profile'>
                             <img src={assets.profile_icon} alt="" />
                             <ul className='navbar-profile-dropdown'>
-                                <Link to='/orders' onClick={onOrderClickHandler}><p>Orders</p></Link>
+                                <Link to='/orders'><p>Orders</p></Link>
                                 <hr />
-                                <Link to='/account' onClick={onAccountClickHandler}><p>Account</p></Link>
+                                <Link to='/account'><p>Account</p></Link>
                                 <hr />
                                 <Link to='/' onClick={onSignOutClickHandler} className='signout'><p>Sign Out</p></Link>
                             </ul>
