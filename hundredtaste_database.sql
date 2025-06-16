@@ -43,6 +43,36 @@ INSERT INTO `categories` VALUES (10,'appetizers'),(11,'main dishes'),(12,'drinks
 UNLOCK TABLES;
 
 --
+-- Table structure for table `in_house_orders`
+--
+
+DROP TABLE IF EXISTS `in_house_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `in_house_orders` (
+  `order_id` varchar(100) NOT NULL,
+  `staff_incharged_username` varchar(100) NOT NULL,
+  `seat_id` int NOT NULL,
+  `order_date` datetime NOT NULL DEFAULT (now()),
+  `payment` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`order_id`),
+  KEY `seat_id` (`seat_id`),
+  KEY `staff_incharged_username` (`staff_incharged_username`),
+  CONSTRAINT `in_house_orders_ibfk_1` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`seat_id`),
+  CONSTRAINT `in_house_orders_ibfk_2` FOREIGN KEY (`staff_incharged_username`) REFERENCES `users` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `in_house_orders`
+--
+
+LOCK TABLES `in_house_orders` WRITE;
+/*!40000 ALTER TABLE `in_house_orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `in_house_orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `online_order_details`
 --
 
@@ -66,7 +96,7 @@ CREATE TABLE `online_order_details` (
 
 LOCK TABLES `online_order_details` WRITE;
 /*!40000 ALTER TABLE `online_order_details` DISABLE KEYS */;
-INSERT INTO `online_order_details` VALUES ('1749369422118',1055,1),('1749369422118',1056,1),('1749369574043',1052,1),('1749369574043',1053,1),('1749369574043',1055,1),('1749369574043',1056,1),('1749369574043',1057,1),('1749370912542',1052,3),('1749370912542',1053,2),('1749370912542',1058,1),('1749372366965',1052,1),('1749372366965',1053,1),('1749372366965',1055,1),('1749407207875',1052,3),('1749407207875',1060,1),('1749407207875',1061,1),('1749411969680',1052,1),('1749411969680',1053,1),('1749411969680',1055,1),('1749541789632',1052,1),('1749541789632',1053,1),('1749541789632',1055,1),('1749541789632',1056,1),('1749541789632',1057,1),('1749541789632',1058,1),('1749541789632',1061,1),('1749559120841',1052,1),('1749559120841',1053,1),('1749564699297',1052,1),('1749564699297',1053,1),('1749570660791',1053,2),('1749588276760',1052,1),('1749588276760',1053,1),('1749588276760',1055,1),('1749588276760',1056,1);
+INSERT INTO `online_order_details` VALUES ('1749369422118',1055,1),('1749369422118',1056,1),('1749369574043',1052,1),('1749369574043',1053,1),('1749369574043',1055,1),('1749369574043',1056,1),('1749369574043',1057,1),('1749370912542',1052,3),('1749370912542',1053,2),('1749370912542',1058,1),('1749372366965',1052,1),('1749372366965',1053,1),('1749372366965',1055,1),('1749407207875',1052,3),('1749407207875',1060,1),('1749407207875',1061,1),('1749411969680',1052,1),('1749411969680',1053,1),('1749411969680',1055,1),('1749541789632',1052,1),('1749541789632',1053,1),('1749541789632',1055,1),('1749541789632',1056,1),('1749541789632',1057,1),('1749541789632',1058,1),('1749541789632',1061,1),('1749559120841',1052,1),('1749559120841',1053,1),('1749564699297',1052,1),('1749564699297',1053,1),('1749570660791',1053,2),('1749588276760',1052,1),('1749588276760',1053,1),('1749588276760',1055,1),('1749588276760',1056,1),('1749745385086',1052,1),('1749745385086',1053,1),('1749745385086',1056,1),('1749751858577',1053,1),('1749751858577',1056,1),('1749751858577',1070,1),('1749751858577',1071,1),('1749752470281',1052,1),('1749752470281',1053,1),('1749752470281',1056,1),('1749752470281',1070,1),('1749752470281',1071,1),('1749752470281',1072,1),('1749753277785',1052,1),('1749753277785',1053,1),('1749753489091',1052,1),('1749753489091',1053,1),('1749753489091',1056,1),('1749753489091',1070,1),('1749753489091',1071,1),('1749753489091',1072,1),('1749881290983',1052,1),('1749881290983',1053,1),('1749881290983',1055,1),('1749881290983',1056,1),('1749881290983',1070,1),('1749881325373',1052,1),('1749881325373',1053,1),('1749881325373',1055,1),('1749881325373',1056,1),('1749881340535',1052,1),('1749881340535',1053,1),('1749881340535',1055,1),('1749881340535',1056,1),('1749881515177',1052,1),('1749881515177',1053,1),('1749881515177',1055,1),('1749881515177',1056,1),('1749882327483',1052,1),('1749882327483',1053,1),('1749882327483',1055,1),('1749882327483',1056,1),('1749882327483',1070,1),('1749882327483',1071,1),('1749882327483',1072,1),('1749882376112',1052,1),('1749882376112',1053,1),('1749882376112',1055,1),('1749882479403',1052,1),('1749882479403',1053,1),('1749882479403',1055,1),('1749882479403',1056,1),('1749892521169',1052,1),('1749892521169',1053,1),('1749892521169',1055,1),('1749892521169',1056,1),('1749892976452',1052,1),('1749892976452',1053,1),('1749892976452',1055,1),('1749893032603',1052,1),('1749893032603',1053,1),('1749893032603',1055,1),('1749893463273',1053,1),('1749893463273',1055,1),('1749893697190',1052,1),('1749893697190',1053,1),('1749893697190',1055,1),('1749893715924',1053,1),('1749893715924',1055,1),('1749893822945',1052,1),('1749893822945',1053,1),('1749893822945',1055,1),('1749894018934',1052,1),('1749894018934',1053,1),('1749894018934',1055,1),('1749894037609',1053,1),('1749894037609',1055,1),('1749895419110',1053,1),('1749895581742',1053,1),('1749895581742',1055,1),('1749897865720',1052,1),('1749897865720',1053,1),('1749897865720',1055,1),('1749897865720',1056,1),('1749897865720',1070,1),('1749897865720',1071,1),('1749897865720',1072,1),('1749897865720',1074,1);
 /*!40000 ALTER TABLE `online_order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,6 +113,7 @@ CREATE TABLE `online_orders` (
   `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `shipping_details` json DEFAULT NULL,
   `status` varchar(100) NOT NULL DEFAULT (_utf8mb4'preparing'),
+  `payment_token` varchar(1000) DEFAULT NULL,
   `payment` tinyint(1) DEFAULT (false),
   PRIMARY KEY (`order_id`),
   KEY `username` (`username`),
@@ -97,8 +128,35 @@ CREATE TABLE `online_orders` (
 
 LOCK TABLES `online_orders` WRITE;
 /*!40000 ALTER TABLE `online_orders` DISABLE KEYS */;
-INSERT INTO `online_orders` VALUES ('1749369422118','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"mbj\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"jkhk\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',0),('1749369574043','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"de\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"feef\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',0),('1749370912542','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"de\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"feef\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',1),('1749372366965','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"de\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"feef\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',1),('1749407207875','admin','2025-06-08 00:00:00','{\"city\": \"sdfsdf\", \"ward\": \"fdsf\", \"email\": \"trungaiaiai@gmail\", \"street\": \"dfsdfsd\", \"district\": \"fdsffdsdfds\", \"lastName\": \"Tròn\", \"firstName\": \"Thi\", \"phoneNumber\": \"0123456789\"}','delivered',1),('1749411969680','nghiavu','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"đ\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"dđ\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',1),('1749541789632','admin','2025-06-10 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"đ\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"dđ\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',1),('1749559120841','admin','2025-06-10 18:26:46','{\"city\": \"Ho Chi Minh\", \"ward\": \"dfsdf\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"sdfsdf\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',1),('1749564699297','nghiavu','2025-06-10 21:09:17','{\"city\": \"Ho Chi Minh\", \"ward\": \"dfsdf\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"sdfsdf\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',1),('1749570660791','admin','2025-06-10 20:02:56','{\"city\": \"Ho Chi Minh\", \"ward\": \"dfsdf\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"sdfsdf\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',0),('1749588276760','nghiavu','2025-06-11 02:21:08','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',1);
+INSERT INTO `online_orders` VALUES ('1749369422118','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"mbj\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"jkhk\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,0),('1749369574043','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"de\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"feef\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749370912542','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"de\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"feef\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749372366965','admin','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"de\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"feef\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749407207875','admin','2025-06-08 00:00:00','{\"city\": \"sdfsdf\", \"ward\": \"fdsf\", \"email\": \"trungaiaiai@gmail\", \"street\": \"dfsdfsd\", \"district\": \"fdsffdsdfds\", \"lastName\": \"Tròn\", \"firstName\": \"Thi\", \"phoneNumber\": \"0123456789\"}','delivered',NULL,1),('1749411969680','nghiavu','2025-06-08 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"đ\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"dđ\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749541789632','admin','2025-06-10 00:00:00','{\"city\": \"Ho Chi Minh\", \"ward\": \"đ\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"dđ\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749559120841','admin','2025-06-10 18:26:46','{\"city\": \"Ho Chi Minh\", \"ward\": \"dfsdf\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"sdfsdf\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749564699297','nghiavu','2025-06-10 21:09:17','{\"city\": \"Ho Chi Minh\", \"ward\": \"dfsdf\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"sdfsdf\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749570660791','admin','2025-06-10 20:02:56','{\"city\": \"Ho Chi Minh\", \"ward\": \"dfsdf\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"sdfsdf\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749588276760','nghiavu','2025-06-11 02:21:08','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749745385086','nghiavu','2025-06-12 23:22:42','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749751858577','nghiavu','2025-06-12 23:07:22','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749752470281','nghiavu','2025-06-12 23:12:28','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749753277785','nghiavu','2025-06-12 23:19:12','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749753489091','nghiavu','2025-06-12 23:20:57','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','delivered',NULL,1),('1749881290983','nghiavu','2025-06-14 13:07:23','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749881325373','nghiavu','2025-06-14 13:08:17','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749881340535','nghiavu','2025-06-14 13:08:54','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749881515177','nghiavu','2025-06-14 13:10:52','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749882327483','nghiavu','2025-06-14 13:25:16','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749882376112','nghiavu','2025-06-14 13:26:05','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749882479403','nghiavu','2025-06-14 13:27:47','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing',NULL,0),('1749892521169','admin','2025-06-14 16:14:46','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$B5wfrsE/OaoBrGMxSc7e9uBBiZsqEF4CCYnmXBPneD.JLB6zya4Uu',1),('1749892976452','admin','2025-06-14 16:21:09','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$G9HBidroJdkwKPjBS28GVu1CRMJ55jQusJ.zGu.MlzwNBv8pUvHZK',0),('1749893032603','admin','2025-06-14 16:21:37','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$6/Hei71W6uMtJPLwDMaStOwVHr9wQ4r1j73ES/L2OqyrVea2TgVE2',1),('1749893463273','admin','2025-06-14 16:25:12','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$foS9X9ZP/mlEAW36HRzLh.dtzw0qwVclCCop9.Fp0mAhAhNwN8eV2',1),('1749893697190','admin','2025-06-14 16:34:05','{\"city\": \"Ho Chi Minh\", \"ward\": \"d\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"d\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$vPZy8x2WP0/Oj6Y6CF7PQOWXvRVuCYvm6psZbbtw/8FZsEquai89m',1),('1749893715924','admin','2025-06-14 16:27:19','{\"city\": \"Ho Chi Minh\", \"ward\": \"ss\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"ss\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$kveX/x7.DzwA8LLdMKh8fuqZ/L1b72z5IISPw9pCnD55.4nS.7SDa',1),('1749893822945','admin','2025-06-14 16:35:08','{\"city\": \"Ho Chi Minh\", \"ward\": \"d\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"d\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$GHzhQieKYuXQtyWMVbqFMulS3DcRP7rNKxEcgytYpV.w.pvrchdkG',1),('1749894018934','admin','2025-06-14 16:36:46','{\"city\": \"Ho Chi Minh\", \"ward\": \"d\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"d\", \"lastName\": \"ddd\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$L.aY.SYdXsIGC07xY17pOuWIaCmQ/2rheTHG5QP.bozWkDAurH9Ni',1),('1749894037609','admin','2025-06-14 16:29:59','{\"city\": \"Ho Chi Minh\", \"ward\": \"ddd\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"dd\", \"lastName\": \"Vu\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$8FG.edGPLafHe4.PkGu39uKpoH6xMyS2dia75jQgqLPNn8s4YmfSS',1),('1749895419110','admin','2025-06-14 16:48:26','{\"city\": \"Ho Chi Minh\", \"ward\": \"d\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"d\", \"lastName\": \"ddd\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$WJuNYBeEZ6g.StiwH1U6LeeScjAvvKnnYyFwlMi1bsx738dsb.w3G',1),('1749895581742','admin','2025-06-14 16:49:48','{\"city\": \"Ho Chi Minh\", \"ward\": \"d\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"d\", \"lastName\": \"ddd\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$xiOO3tw.Tg9SCjdFsmG/cu/pTIm5C0B/HBWtpYvtPqtnzm9m1Siga',1),('1749897865720','admin','2025-06-14 17:08:50','{\"city\": \"Ho Chi Minh\", \"ward\": \"d\", \"email\": \"trungaiaiai@gmail.com\", \"street\": \"9 Nguyen Thi Dinh\", \"district\": \"d\", \"lastName\": \"ddd\", \"firstName\": \"Harry\", \"phoneNumber\": \"0356461447\"}','preparing','$2b$10$alePVR5MzwHgXKlqohWdoOlk2BvtSmUxOjYKsosok/K2VmoHFdiq6',1);
 /*!40000 ALTER TABLE `online_orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `price_history`
+--
+
+DROP TABLE IF EXISTS `price_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `price_history` (
+  `date` date NOT NULL DEFAULT (curdate()),
+  `product_id` int NOT NULL,
+  `product_price` double DEFAULT NULL,
+  PRIMARY KEY (`date`,`product_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `price_history_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `price_history`
+--
+
+LOCK TABLES `price_history` WRITE;
+/*!40000 ALTER TABLE `price_history` DISABLE KEYS */;
+INSERT INTO `price_history` VALUES ('2025-06-11',1052,20000),('2025-06-11',1053,65000),('2025-06-11',1055,85000),('2025-06-11',1056,70000),('2025-06-11',1057,15000),('2025-06-11',1058,24000),('2025-06-11',1060,30000),('2025-06-11',1061,35000);
+/*!40000 ALTER TABLE `price_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -125,7 +183,7 @@ CREATE TABLE `products` (
   UNIQUE KEY `uq_product_name_constraint` (`product_name`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1062 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1078 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,8 +192,31 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1052,'food',20000,'12322','1749493909800Screenshot 2025-05-21 195608.png',11,1),(1053,'food2',65000,'123456','1749286277427food_2.png',11,1),(1055,'Taco gà cà ri',85000,'Taco gà','1749309794716food_6.png',10,1),(1056,'food5',70000,'food5','1749306345945food_9.png',10,1),(1057,'food6',15000,'food6','1749286478207food_6.png',13,1),(1058,'food8',24000,'222','1749300499292food_32.png',12,1),(1060,'food9',30000,'23234','1749302474211food_17.png',13,0),(1061,'Nui Phô Mai Đút Lò',35000,'Thơm béo ngậy','1749389569157food_25.png',11,1);
+INSERT INTO `products` VALUES (1052,'food',20000,'12322','1749493909800Screenshot 2025-05-21 195608.png',11,1),(1053,'food2',65000,'123456','1749286277427food_2.png',11,1),(1055,'Taco gà cà ridddd',85000,'Taco gàddd','1749309794716food_6.png',10,1),(1056,'food5',70000,'food5','1749306345945food_9.png',10,1),(1057,'food6',15000,'food6','1749286478207food_6.png',13,0),(1058,'food8',24000,'222','1749300499292food_32.png',12,0),(1060,'food9',30000,'23234','1749302474211food_17.png',13,0),(1061,'Nui Phô Mai Đút Lò',35000,'Thơm béo ngậy','1749389569157food_25.png',11,0),(1070,'asdfadsf',33333,'33333','1749662695255food_1.png',10,1),(1071,'asdasddf',333111,'asdfadf','1749662706191food_13.png',10,1),(1072,'asdfdf',232323,'asdfadf','1749662714071food_14.png',10,1),(1074,'adsfadsf',33333,'asdfadsf','1749662731756food_16.png',10,1),(1077,'sdfasdf',33333,'asdfasdf','1749895222345parcel_icon.png',10,1);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `seat`
+--
+
+DROP TABLE IF EXISTS `seat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `seat` (
+  `seat_id` int NOT NULL,
+  `status` varchar(20) DEFAULT 'available',
+  PRIMARY KEY (`seat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `seat`
+--
+
+LOCK TABLES `seat` WRITE;
+/*!40000 ALTER TABLE `seat` DISABLE KEYS */;
+/*!40000 ALTER TABLE `seat` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -149,6 +230,7 @@ CREATE TABLE `users` (
   `username` varchar(100) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
   `password` varchar(1024) NOT NULL,
   `type` int NOT NULL,
   `cart` json DEFAULT (json_object()),
@@ -163,7 +245,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('admin','adsf','adsfadf','$2b$10$FhRcePsGTjIKLH8kKX0Bo.KT11zP/3fMzuvwxgz/NwouqHoHYc.S6',0,'{}'),('nghiavu','Nghia','Vu','$2b$10$JU8DosXDMfa6WR1ET.zLOenSiFcZ8P4gQPnteKnverLFx9ktA5Cpy',2,'{}');
+INSERT INTO `users` VALUES ('admin','harryyyyyy','adsfadf',NULL,'$2b$10$FhRcePsGTjIKLH8kKX0Bo.KT11zP/3fMzuvwxgz/NwouqHoHYc.S6',0,'{}'),('admin1','nghia','vu','','$2b$10$zng8Y.xV8Sc7Rs.ObC2fNug0/dvtMZ.mhEHroiENv1bGTi2V28Mkq',0,'{}'),('hongminh','hong','minh','','$2b$10$MiWy0Nqyii1pxfPLHRvSxeC02I/ExwhTnSas.WV/InMwCbibmeKc6',0,'{}'),('minhnhu','minh','nhu','','$2b$10$.tfUD62JTLASK2Txa8J4eutVgOYvNdvowQZZ70ZhyVfd6Zl51JJuS',2,'{}'),('nghiavu','Nghia','Vu',NULL,'$2b$10$JU8DosXDMfa6WR1ET.zLOenSiFcZ8P4gQPnteKnverLFx9ktA5Cpy',2,'{}'),('staff1','tiendd','khoaddd','0913353547','$2b$10$kp/uTvIBKC/SoLcJSh8EFOGsQwyNt6SklQ3mO1/fHNcXTRek3I/wa',1,'{}'),('thieuthi','thieu','thi','','$2b$10$Ju0WsXufCTjgPR5zz6ewXeY83NpA8b.eAb/UujbnW.8m..0I4bGmm',0,'{}'),('thitron','thi','tron','0913353543','$2b$10$M.M/K1tp6wwi/IISauxKi.IclK8kDnjQkUa3Y9M5Ma5GOfVJIfRHe',0,'{}');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -176,4 +258,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-11  9:50:15
+-- Dump completed on 2025-06-14 23:07:03
