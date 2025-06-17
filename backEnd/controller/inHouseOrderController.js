@@ -45,7 +45,8 @@ const getInHouseOrders = async (req, res) => {
                             FROM in_house_orders o
                             JOIN in_house_order_details od ON o.order_id = od.order_id
                             JOIN products p ON od.product_id = p.product_id
-                            GROUP BY o.order_id, o.staff_incharged_username, o.seat_id, o.order_date, o.customer_name`;
+                            GROUP BY o.order_id, o.staff_incharged_username, o.seat_id, o.order_date, o.customer_name
+                            ORDER BY order_id DESC`;
 
     try {
         const [results] = await database.promise().query(select_query);

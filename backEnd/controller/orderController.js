@@ -154,7 +154,7 @@ const getOrders = async (req, res) => {
                             JOIN products p ON od.product_id = p.product_id
                             WHERE payment is true
                             GROUP BY o.order_id, o.username, o.order_date
-                            ORDER BY o.order_id desc`;
+                            ORDER BY o.order_id DESC`;
     try {
         const [results] = await database.promise().query(select_query);
         return res.status(200).json({ orders: results });
