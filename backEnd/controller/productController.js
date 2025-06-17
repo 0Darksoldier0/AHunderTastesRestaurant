@@ -71,10 +71,16 @@ const listAvailableProducts = async (req, res) => {
 
 // delete a product
 const removeProduct = async (req, res) => {
-    const {product_id} = req.body;
+    const { product_id } = req.body;
 
     const select_query = "SELECT * FROM products WHERE product_id = ?";
     const delete_query = "DELETE FROM products WHERE product_id = ?";
+    const select_productFromOrderDetails_query = `SELECT COUNT(*) 
+                                            FROM (
+                                                SELECT product_id FROM online_order_details WHERE product_id = ?
+                                                UNION ALL
+                                                SELECT product_id FROM in_house_order_details WHERE product_id = ?
+                                            ) AS order_details;`
 
     const set_safe_update_query = "SET SQL_SAFE_UPDATES = ?"
     const update_cart_query = `UPDATE users SET cart = JSON_REMOVE(cart, '$."${product_id}"');`
@@ -88,30 +94,38 @@ const removeProduct = async (req, res) => {
         const [results] = await connection.query(select_query, [product_id]);
         if (results.length <= 0) {
             console.log("(RemoveProduct) Product not found: ");
-            
+
             await connection.rollback();
             if (connection) {
                 connection.release();
             }
-            
+
             return res.status(404).json({ message: "Product not found" });
         }
         else {
             // Remove the selected product
-            await connection.query(delete_query, [product_id]);
+            const [results] = await connection.query(select_productFromOrderDetails_query, [product_id])
+            if (results.length > 0) {
+                await connection.rollback();
+                return res.status(409).json({ message: "Product removal not allowed, please change status to 'unavailable'" })
+            }
+            else {
+                await connection.query(delete_query, [product_id]);
+                // Also remove product from all users cart
+                await connection.query(set_safe_update_query, [0]);
+                await connection.query(update_cart_query);
+                await connection.commit();
 
-            // Also remove product from all users cart
-            await connection.query(set_safe_update_query, [0]);
-            await connection.query(update_cart_query);
-            await connection.commit();
-            
-            fs.unlink(`uploads/${results[0].image}`, (err) => {
-                if (err) {
-                    console.error("(RemoveProduct) Fail to unlink product image");
-                }
-            });
+                fs.unlink(`uploads/${results[0].image}`, (err) => {
+                    if (err) {
+                        console.error("(RemoveProduct) Fail to unlink product image");
+                    }
+                });
 
-            return res.status(200).json({ message: "Product removed" });
+                return res.status(200).json({ message: "Product removed" });
+            }
+
+
         }
     }
     catch (error) {
@@ -127,7 +141,7 @@ const removeProduct = async (req, res) => {
             }
         }
 
-        return res.status(500).json({ message: "Product removal not allowed, please change status to 'unavailable'" });
+        return res.status(500).json({ message: "Error removing product" });
     }
     finally {
         if (connection) {
@@ -146,10 +160,10 @@ const removeProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     const { product_name, price, description, category_id, availability, product_id } = req.body;
     const update_query = "UPDATE products SET product_name = ?, price = ?, description = ?, category_id = ?, availability = ? WHERE product_id = ?";
-    
+
     const set_safe_update_query = "SET SQL_SAFE_UPDATES = ?"
     const update_cart_query = `UPDATE users SET cart = JSON_REMOVE(cart, '$."${product_id}"');`
-    
+
     let connection;
 
     try {
@@ -158,7 +172,7 @@ const updateProduct = async (req, res) => {
         await connection.beginTransaction();
 
         await connection.query(update_query, [product_name, price, description, category_id, availability, product_id]);
-        
+
         // Also remove product from all users cart if availabity is set to 0
         if (availability === 0) {
             await connection.query(set_safe_update_query, [0]);
@@ -226,14 +240,14 @@ const updateProductImage = async (req, res) => {
 
 const getProductPrice = async (req, res) => {
     const select_query = "SELECT product_name, price, category_id FROM products ORDER BY availability desc, category_id asc";
-    
+
     try {
         const [results] = await database.promise().query(select_query);
-        return res.status(200).json({data: results});
+        return res.status(200).json({ data: results });
     }
     catch (error) {
         console.error("(GetProductPrice) Error fetching product price: ", error);
-        return res.status(500).json({message: "Error fetching product price"})
+        return res.status(500).json({ message: "Error fetching product price" })
     }
 }
 
