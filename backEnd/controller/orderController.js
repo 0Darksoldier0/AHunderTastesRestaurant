@@ -171,6 +171,7 @@ const updateStatus = async (req, res) => {
 
     try {
         await database.promise().query(update_query, [status, order_id]);
+        console.log("status updated: ", status);
         return res.status(200).json({ message: "Order status updated" })
     }
     catch (error) {

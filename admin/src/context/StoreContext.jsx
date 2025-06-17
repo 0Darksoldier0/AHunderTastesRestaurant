@@ -47,7 +47,7 @@ const StoreContextProvider = (props) => {
             const response = await axios.post(`${BACKEND_URL}/api/order/list`, {}, { headers: { token } });
             if (response.status === 200) {
                 setOnlineOrdersData(response.data.orders);
-                console.log(response.data.orders);
+                // console.log(response.data.orders);
             }
         }
         catch (error) {
@@ -66,7 +66,7 @@ const StoreContextProvider = (props) => {
             
             if (response.status === 200) {
                 setInHouseOrderData(response.data.orders);
-                console.log(response.data.orders)
+                // console.log(response.data.orders)
             }
         }
         catch (error) {

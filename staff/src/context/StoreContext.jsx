@@ -99,7 +99,7 @@ const StoreContextProvider = (props) => {
                         orderItems.push(itemInfo);
                     }
                 })
-                const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/addItems`, { cartItems: orderItems, order_id: localStorage.getItem("orderId")}, { headers: { token } });
+                const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/addItems`, { cartItems: orderItems, order_id: localStorage.getItem("orderId") }, { headers: { token } });
                 setCartItems({});
                 toast.success("Order sent")
             }
@@ -116,10 +116,10 @@ const StoreContextProvider = (props) => {
             }
         }
     }
-    
+
     const fetchOrderDetails = async (token) => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getDetails`, {order_id: localStorage.getItem("orderId")}, {headers: {token}});
+            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getDetails`, { order_id: localStorage.getItem("orderId") }, { headers: { token } });
             if (response.status === 200) {
                 setOrderDetailData(response.data.order_details);
             }
@@ -136,7 +136,7 @@ const StoreContextProvider = (props) => {
 
     const fetchOrderData = async (token) => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getOrderData`, {order_id: localStorage.getItem("orderId")}, {headers: {token}});
+            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/getOrderData`, { order_id: localStorage.getItem("orderId") }, { headers: { token } });
             if (response.status === 200) {
                 setSeatId(response.data.orderData[0].seat_id)
             }
@@ -155,7 +155,7 @@ const StoreContextProvider = (props) => {
         let orderTotal = 0;
         for (let i = 0; i < orderDetailData.length; i++) {
             orderTotal += orderDetailData[i].price * orderDetailData[i].quantity;
-            
+
         }
         return orderTotal
     }
@@ -199,7 +199,9 @@ const StoreContextProvider = (props) => {
 
         const intervalId = setInterval(async () => {
             await fetchFoodList()
-            
+            if (localStorage.getItem("orderId")) {
+                fetchOrderDetails(localStorage.getItem("token"))
+            }
             if (!orderId) {
                 await fetchAvailableTable(localStorage.getItem("token"));
             }

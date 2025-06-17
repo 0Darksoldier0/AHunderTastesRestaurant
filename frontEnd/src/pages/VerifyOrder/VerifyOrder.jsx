@@ -3,6 +3,7 @@ import './VerifyOrder.css'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { BACKEND_URL } from '../../../config/constants'
 import axios from 'axios'
+import {toast} from 'react-toastify'
 
 const VerifyOrder = () => {
 
@@ -15,18 +16,24 @@ const VerifyOrder = () => {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/order/verifyOrder`, { payment_token, order_id });
             if (response.data.success) {
-                navigate("/orders");
-                window.location.reload();
-
+                toast.success("Payment Completed"); 
+                setTimeout(() => {
+                    navigate("/orders");
+                    window.location.reload();
+                }, 3000)
             }
             else {
-                console.log("payment failed");                
+                toast.error("Payment Failed");
+                setTimeout(() => {
+                    navigate("/");
+                    window.location.reload();
+                }, 3000)
             }
         }
         catch (error) {
             console.log(error);
         }
-        
+
     }
 
     useEffect(() => {

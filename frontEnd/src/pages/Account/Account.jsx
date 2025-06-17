@@ -150,7 +150,7 @@ const Account = () => {
                         <button className='save-btn' type='submit'>Save</button>
                     </div>
                 </form>
-
+                <br /><br />
                 <form className='groups' onSubmit={onPasswordSaveClickHandler}>
                     <h3>Password</h3>
                     <div className='sub-group'>
@@ -172,8 +172,6 @@ const Account = () => {
                         <button className='save-btn' type='submit'>Save</button>
                     </div>
                 </form>
-
-                <button className='return-btn' type='button'>RETURN</button>
             </div>
         </div>
     )

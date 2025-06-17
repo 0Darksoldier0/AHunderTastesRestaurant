@@ -80,7 +80,7 @@ const OnlineOrdersManagement = () => {
                                 <img src={assets.parcel_icon} alt="" />
                                 <p onClick={() => onOrderIdClickHandler(order)} className='order-id'>{order.order_id}</p>
                                 <p>{order.order_date.replace('T', ' ').replace('.000Z', '')}</p>
-                                <select onChange={(event) => onSelectStatusHandler(event, order.order_id)} className='order-status'>
+                                <select onChange={(event) => onSelectStatusHandler(event, order.order_id)} value={order.status} className='order-status'>
                                     <option value="preparing">Preparing</option>
                                     <option value="out for delivery">Out For Delivery</option>
                                     <option value="delivered">Delivered</option>

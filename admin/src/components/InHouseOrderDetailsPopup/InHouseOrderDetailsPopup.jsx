@@ -43,10 +43,12 @@ const InHouseOrderDetailsPopup = ({ order, token, onClose }) => {
                         <h2>Order Summary</h2>
                         <div className="order-items">
                             {orderDetails.map((item, index) => (
-                                <div key={index} className="order-item">
-                                    <p>{item.product_name} x {item.quantity}</p>
+                                item.served_quantity > 0 
+                                ?<div key={index} className="order-item">
+                                    <p>{item.product_name} x {item.served_quantity}</p>
                                     <p>{item.quantity * item.price} vnd</p>
                                 </div>
+                                :<></>
                             ))}
                         </div>
                         <div className="field-group subtotal">

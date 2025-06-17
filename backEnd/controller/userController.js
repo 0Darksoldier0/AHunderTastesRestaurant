@@ -38,7 +38,7 @@ const adminSignIn = async (req, res) => {
 // user sign in
 const userSignIn = async (req, res) => {
     const { username, password } = req.body;
-    const select_query = "SELECT * FROM users WHERE username = ?";
+    const select_query = "SELECT * FROM users WHERE username = ? AND type = 2";
     try {
         const [results] = await database.promise().query(select_query, [username]);
         if (results.length <= 0) {

@@ -41,7 +41,7 @@
 
 .list-table-format3 {
     display: grid;
-    grid-template-columns:  100px 1fr 1fr 1fr ;
+    grid-template-columns:  150px 1fr 1fr 1fr ;
     align-items: center;
     justify-items: center;
     gap: 10px;

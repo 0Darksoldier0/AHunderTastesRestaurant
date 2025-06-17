@@ -227,7 +227,7 @@ const OrdersManagement = () => {
                                     itemsToPrepare.map((item, itemIndex) => (
                                         <div key={`${order.order_id}-${item.product_id}`} className='list-table-format3'> {/* More stable key */}
                                             <p>Product ID: {item.product_id}</p>
-                                            <p>Product Name: {item.product_name}</p>
+                                            <p>{item.product_name}</p>
                                             <p>Quantity: {item.quantity - item.served_quantity}</p>
                                             <select
                                                 className='order-status'

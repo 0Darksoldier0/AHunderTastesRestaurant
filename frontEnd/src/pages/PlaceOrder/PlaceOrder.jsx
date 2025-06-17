@@ -6,6 +6,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import validator from 'validator'
 
 const PlaceOrder = () => {
 
@@ -22,17 +23,36 @@ const PlaceOrder = () => {
         ward: "",
         district: "",
         city: "",
-        phoneNumber: ""
+        phone_number: ""
     })
 
     const onChangeHandler = (event) => {
-        const {name, value} = event.target;
-        setShippingData(data => ({...data, [name]: value}));
+        const { name, value } = event.target;
+        if (name === "phone_number") {
+            if (/^\d*\.?\d*$/.test(value)) {
+                setShippingData(data => ({ ...data, [name]: value }));
+            }
+        }
+        else {
+            setShippingData(data => ({ ...data, [name]: value }));
+        }
+
     }
 
     const onProcessToPaymentClickHandler = async (event) => {
         event.preventDefault();
-        
+
+        if (shippingData.firstName.trim() === "" || shippingData.lastName.trim() === "" ||
+            shippingData.street.trim() === "" || shippingData.ward.trim() === "" ||
+            shippingData.district.trim() === "" || shippingData.city.trim() === "") {
+            toast.error("Please enter valid shipping data")
+            return;
+        }
+        if (!validator.isMobilePhone(shippingData.phone_number, 'vi-VN')) {
+            toast.error("Invalid phone number")
+            return;
+        }
+
         let orderItems = [];
         food_list.map((item) => {
             if (cartItems[String(item.product_id)] > 0) {
@@ -43,19 +63,19 @@ const PlaceOrder = () => {
         })
 
         // console.log(orderItems);
-        
+
         // let orderData = {
         //     shipping_details: shippingData,
         //     items: orderItems,
         //     amount: getCartTotalAmount() + deliveryFee
         // }
-        
+
         const shippingDetails_JSON = JSON.stringify(shippingData);
         console.log(shippingDetails_JSON);
         try {
-            let response = await axios.post(`${BACKEND_URL}/api/order/place`, {cartItems: orderItems, shipping_details: shippingDetails_JSON}, {headers: {token}})
+            let response = await axios.post(`${BACKEND_URL}/api/order/place`, { cartItems: orderItems, shipping_details: shippingDetails_JSON }, { headers: { token } })
             if (response.status === 200) {
-                const {session_url} = response.data;
+                const { session_url } = response.data;
                 window.location.replace(session_url)
             }
         }
@@ -92,7 +112,7 @@ const PlaceOrder = () => {
                     <input name='district' onChange={onChangeHandler} value={shippingData.district} type="text" placeholder='District' required />
                     <input name='city' onChange={onChangeHandler} value={shippingData.city} type="text" placeholder='City' required />
                 </div>
-                <input name='phoneNumber' onChange={onChangeHandler} value={shippingData.phoneNumber} type="text" placeholder='Phone number' required />
+                <input name='phone_number' onChange={onChangeHandler} value={shippingData.phone_number} type="text" placeholder='Phone number' required />
             </div>
             <div className="place-order-right">
                 <div className='cart-total'>

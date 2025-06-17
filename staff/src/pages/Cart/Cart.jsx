@@ -27,13 +27,20 @@ const Cart = () => {
 
     const onConfirmHandler = async () => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/updateTableStatus`, { seat_id: seatId, availability: 1 }, { headers: { token } })
-            if (response.status === 200) {
-                console.log(seatId);
+            if (orderDetailData.length > 0) {
                 clearState()
                 navigate('/');
-                // window.location.reload();
             }
+            else {
+                const response = await axios.post(`${BACKEND_URL}/api/inhouseorder/updateTableStatus`, { seat_id: seatId, availability: 1 }, { headers: { token } })
+                if (response.status === 200) {
+                    clearState()
+
+                    navigate('/');
+                    // window.location.reload();
+                }
+            }
+
         }
         catch (error) {
             if (error.response) {

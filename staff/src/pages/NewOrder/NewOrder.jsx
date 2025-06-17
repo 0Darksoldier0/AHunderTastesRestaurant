@@ -37,10 +37,12 @@ const NewOrder = () => {
                 await axios.post(`${BACKEND_URL}/api/inhouseorder/updateTableStatus`, { seat_id: selectedTable, availability: 0 }, { headers: { token } });
                 setOrderId(response.data.order_id)
                 localStorage.setItem("orderId", response.data.order_id);   
-                navigate('/menu');
+                
                 await fetchOrderData(token);
                 setSeatId(selectedTable);
                 localStorage.setItem("seatId", selectedTable);
+
+                navigate('/menu');
             }
         }
         catch (error) {

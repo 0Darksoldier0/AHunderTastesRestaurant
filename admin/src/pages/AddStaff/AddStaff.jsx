@@ -43,7 +43,7 @@ const AddStaff = () => {
         event.preventDefault();
 
         try {
-            const response = await axios.post(`${BACKEND_URL}/api/user/staffSignUp`, data);
+            const response = await axios.post(`${BACKEND_URL}/api/user/staffSignUp`, data, {headers: {token}});
 
             if (response.status === 200) {
                 setData({

@@ -53,3 +53,14 @@
 .confirm-popup .cancel-btn:hover {
     background-color: rgb(200, 200, 200); /* Darker grey on hover */
 }
+
+.confirm-popup input {
+    height: 35px;
+    padding: 5px 15px;
+    border: 2px solid rgb(210, 210, 210);
+    border-radius: 18px;
+    outline: none;
+}
+.confirm-popup input:focus {
+    border: 2px solid brown;
+}

@@ -36,6 +36,7 @@ const ConfirmPopup = ({onConfirm, onClose}) => {
                 <h2>Confirm Payment From Customer? </h2>
                 <input type="password" name="password" value={data.password} onChange={onChangeHandler} placeholder='password'/>
                 <button className='confirm-btn' onClick={onConfirmHandler}>Confirm</button>
+                <br /><br />
                 <button className='cancel-btn' onClick={onClose}>Cancel</button>
             </div>
         </div>
