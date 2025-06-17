@@ -66,7 +66,7 @@ CREATE TABLE `in_house_order_details` (
 
 LOCK TABLES `in_house_order_details` WRITE;
 /*!40000 ALTER TABLE `in_house_order_details` DISABLE KEYS */;
-INSERT INTO `in_house_order_details` VALUES ('1750149777686',1078,1,1),('1750149777686',1079,2,2),('1750149777686',1081,2,2);
+INSERT INTO `in_house_order_details` VALUES ('1750149777686',1078,1,1),('1750149777686',1079,2,2),('1750149777686',1081,2,2),('1750151421278',1080,1,1),('1750151421278',1081,1,1);
 /*!40000 ALTER TABLE `in_house_order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,7 +98,7 @@ CREATE TABLE `in_house_orders` (
 
 LOCK TABLES `in_house_orders` WRITE;
 /*!40000 ALTER TABLE `in_house_orders` DISABLE KEYS */;
-INSERT INTO `in_house_orders` VALUES ('1750149777686','staff_minhhong',1,'2025-06-17 14:36:30','Tien Khoa',1);
+INSERT INTO `in_house_orders` VALUES ('1750149777686','staff_minhhong',1,'2025-06-17 14:36:30','Tien Khoa',1),('1750151338392','staff_minhhong',1,'2025-06-17 16:05:02','asdfasdf',0),('1750151421278','staff_minhhong',1,'2025-06-17 16:05:43','adsfasdf',1);
 /*!40000 ALTER TABLE `in_house_orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,4 +288,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-17 15:56:21
+-- Dump completed on 2025-06-17 16:07:09
