@@ -202,11 +202,12 @@ const StoreContextProvider = (props) => {
             if (localStorage.getItem("orderId")) {
                 fetchOrderDetails(localStorage.getItem("token"))
             }
-            if (!orderId) {
-                await fetchAvailableTable(localStorage.getItem("token"));
+            else {
+                if (localStorage.getItem("token")) {
+                    await fetchAvailableTable(localStorage.getItem("token"));
+                }
             }
-
-        }, 10000);
+        }, 1000);
 
         return () => clearInterval(intervalId);
     }, [])
