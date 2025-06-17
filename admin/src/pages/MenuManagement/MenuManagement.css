@@ -34,19 +34,6 @@
   opacity: 0.8;
 }
 
-.top-section input {
-  height: 45px;
-  width: 200px;
-  padding: 0px 15px;
-  border: 1px solid rgb(219, 219, 219);
-  border-radius: 25px;
-  outline: none;
-}
-
-.top-section input:focus {
-  border: 1px solid brown;
-}
-
 .list-table-format {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
