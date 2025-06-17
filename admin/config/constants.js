@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:4000";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const MIN_PRICE = 10000;
 
 export {BACKEND_URL, MIN_PRICE}
