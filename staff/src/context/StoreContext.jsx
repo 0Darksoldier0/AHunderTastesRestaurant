@@ -207,7 +207,7 @@ const StoreContextProvider = (props) => {
                     await fetchAvailableTable(localStorage.getItem("token"));
                 }
             }
-        }, 1000);
+        }, 5000);
 
         return () => clearInterval(intervalId);
     }, [])

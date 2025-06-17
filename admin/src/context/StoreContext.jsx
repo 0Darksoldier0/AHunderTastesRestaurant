@@ -129,7 +129,7 @@ const StoreContextProvider = (props) => {
                 await fetchOnlineOrders(currentToken);
                 await fetchInhouseOrders(currentToken);
             }
-        }, 10000);
+        }, 5000);
 
         return () => clearInterval(intervalId);
     }, [])
