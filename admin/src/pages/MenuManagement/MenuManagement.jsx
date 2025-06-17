@@ -114,7 +114,6 @@ const MenuManagement = () => {
                 <h1>Menu Items List</h1>
                 <div>
                     <Link to='/menuManagement/addProduct'><button>Add Product</button></Link>
-                    <input type="text" placeholder='Search' />
                 </div>
             </div>
             <div className='list-table'>
