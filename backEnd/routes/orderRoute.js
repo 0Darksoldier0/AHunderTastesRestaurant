@@ -1,7 +1,7 @@
 import express from 'express'
 import { authenticateToken } from '../middleware/authentication.js'
 import { placeOrder, verifyOrder, getUserOrders, getOrderDetails, getOrders, updateStatus } from '../controller/orderController.js'
-import { checkAdminAccountType, checkAdminAndStaffAccountType } from '../middleware/checkAccountType.js';
+import { checkAdminAndStaffAccountType } from '../middleware/checkAccountType.js';
 
 const orderRouter = express.Router();
 

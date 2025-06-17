@@ -42,7 +42,7 @@ const listProducts = async (req, res) => {
     const selectALLProduct_query = `SELECT p.product_id, p.product_name, p.price, p.description, p.image, p.category_id, c.category_name, p.availability 
                                     FROM products p 
                                     JOIN categories c ON p.category_id = c.category_id
-                                    ORDER BY category_id`;
+                                    ORDER BY availability DESC, category_id ASC, product_name ASC`;
     try {
         const [results] = await database.promise().query(selectALLProduct_query);
         return res.status(200).json({ products: results })
