@@ -15,24 +15,13 @@ dotenv.config();
 
 // app config
 const app = express()
-const port = process.env.SERVER_PORT 
+const port = process.env.PORT 
 
 
 // middleware
 app.use(express.json())
 app.use(cors())
 
-
-// test connection query
-// app.get("/testdb", async (req, res) => { // Make the handler async
-//     try {
-//         const [results, fields] = await database.promise().query('SELECT 1 + 1 AS solution');
-//         res.json({ message: 'Database query successful!', solution: results[0].solution });
-//     } catch (error) {
-//         console.error('Error executing query:', error);
-//         return res.status(500).send('Error querying the database');
-//     }
-// });
 
 // api endpoints
 app.use('/api/product', productRouter)
@@ -57,5 +46,5 @@ cron.schedule('5 0 * * *', () => {
 
 
 app.listen(port, () => {
-    console.log(`Server Started on http://localhost:${port}`)
+    console.log(`Server Started on https://ahundertastesrestaurant.onrender.com:${port}`)
 })
