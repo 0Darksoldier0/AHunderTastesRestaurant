@@ -1,3 +1,3 @@
-const FRONTEND_URL = "http://localhost:5173"
+const FRONTEND_URL = process.env.FRONTEND_URL
 
 export {FRONTEND_URL}
