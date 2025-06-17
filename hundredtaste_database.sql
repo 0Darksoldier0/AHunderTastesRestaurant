@@ -52,6 +52,7 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-06-17 22:32:18
+
 --
 -- Table structure for table `in_house_orders`
 --
@@ -92,6 +93,7 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-06-17 22:32:18
+
 --
 -- Table structure for table `online_order_details`
 --
@@ -173,6 +175,7 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-06-17 22:32:18
+
 --
 -- Table structure for table `price_history`
 --
