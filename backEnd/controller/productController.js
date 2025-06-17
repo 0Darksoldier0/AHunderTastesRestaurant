@@ -75,12 +75,12 @@ const removeProduct = async (req, res) => {
 
     const select_query = "SELECT * FROM products WHERE product_id = ?";
     const delete_query = "DELETE FROM products WHERE product_id = ?";
-    const select_productFromOrderDetails_query = `SELECT COUNT(*) 
-                                            FROM (
-                                                SELECT product_id FROM online_order_details WHERE product_id = ?
-                                                UNION ALL
-                                                SELECT product_id FROM in_house_order_details WHERE product_id = ?
-                                            ) AS order_details;`
+    const select_productFromOrderDetails_query =   `SELECT COUNT(*) 
+                                                    FROM (
+                                                        SELECT product_id FROM online_order_details WHERE product_id = ?
+                                                        UNION ALL
+                                                        SELECT product_id FROM in_house_order_details WHERE product_id = ?
+                                                    ) AS order_details`;
 
     const set_safe_update_query = "SET SQL_SAFE_UPDATES = ?"
     const update_cart_query = `UPDATE users SET cart = JSON_REMOVE(cart, '$."${product_id}"');`
@@ -104,7 +104,7 @@ const removeProduct = async (req, res) => {
         }
         else {
             // Remove the selected product
-            const [results] = await connection.query(select_productFromOrderDetails_query, [product_id])
+            const [results] = await connection.query(select_productFromOrderDetails_query, [product_id, product_id])
             if (results.length > 0) {
                 await connection.rollback();
                 return res.status(409).json({ message: "Product removal not allowed, please change status to 'unavailable'" })
